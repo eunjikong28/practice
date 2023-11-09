@@ -4,8 +4,8 @@ navbar:
   title: "EDUC 641"
   
   left:
-  - text: Syllabus
-    href: syllabus.html
+  - text: EK_Syllabus
+    href: EK_syllabus.html
   - text: Schedule
     href: schedule.html
   - text: Lectures
