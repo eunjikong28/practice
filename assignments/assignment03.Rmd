@@ -1,0 +1,90 @@
+---
+title: "EDUC 641 Assignment 3"
+subtitle: "(Summarizing continuous data and $t$-tests)"
+output: html_document
+---
+```{R, setup, include = FALSE}
+if (!require(pacman)) install.packages('pacman', repos = 'https://cran.rstudio.com')
+pacman::p_load(here, tidyverse, ggplot2, xaringan, knitr, kableExtra)
+opts_chunk$set(include = FALSE)
+```
+
+### General Guidelines
+
+The purpose of this assignment is to practice the concepts and vocabulary we have been modeling in class and implement some of the techniques we have learned. You may work on your own or collaborate with one partner. Please make sure that you engage in a a full, fair and mutually-agreeable collaboration if you do choose to collaborate. If you do collaborate, you should plan, execute and write-up your analyses together, not simply divide the work. Please make sure to indicate clearly when your work is joint and any other individual or resource (outside of class material) you consulted in your responses.
+
+### Submission Requirements
+
+Please upload below two files on Canvas:  
+
+1. An .html, .doc(x) or .pdf file that includes your typed responses (in your own words and not identical to anybody else's except your partner), tables, and/or figures to the problems
+2. The .Rmd or .R file that you used to render the tables and figures in the above html/pdf. 
+
+*If you have prior experience, you may choose to compose your answers in RMarkdown and render to a Word doc or pdf. If so, you can simply set up echo = TRUE and include = TRUE in your .Rmd file to allow both code and answers to display in a single output file. If you have no idea what the preceding sentence meant, ignore it.*  
+
+### Objectives of this assignment
+
+ * Describe and summarize continuous data
+
+ * Create visualizations of continuous data
+ 
+ * Conduct and interpret a one-sample $t$-test
+
+### Data Background
+
+The dataset we'll be using in this assignment is drawn from the NCRECE [Teacher Professional Development Study (PDS)](https://www.icpsr.umich.edu/web/ICPSR/studies/34848) data. This professional development study was a randomized controlled evaluation of two forms of professional development (PD) - coursework (phase 1) and consultancy (phase 2) - delivered to about 490 early childhood education teachers across the nation. These PD supports aimed to improve teachers' implementation of language/literacy activities and interactions with children, as well as promote gains in children's social and academic development. 
+
+The primary goal of the intervention was to improve language and literacy skills, however, prior studies have shown that there were no observed average impacts of either the coursework or the consultancy PD intervention on child outcomes at the end of phase 2 ([Pianta et al., 2017](https://www.tandfonline.com/doi/abs/10.1080/10409289.2017.1319783?journalCode=heed20)). We draw a sample similar to the one used in Pianta et al (2017) but limit to only teachers who were treated in phase 1 then assigned to either treatment or control group in phase 2. This sample allows you to answer two questions: (a) did the consultancy PD intervention improve children vocabulary? and (b) did the dosage of the coursework PD intervention impact children vocabulary skills? You will answer these two questions in the paired assignments 3 and 4.
+
+**Sample**. Our dataset is teacher-level data for 126 preschool teachers. They were all in the treatment group for the 14-session coursework PD intervention, had no missing data on coursework attendance, and were in either the treatment or control group for the consultancy PD intervention.
+
+**Key variables**. We have two treatment measures, a binary variable indicating whether the teacher was treated in the consultancy PD intervention and an integer variable capturing the total number of sessions the teacher participated in the coursework PD intervention. We also have an outcome measure, the average score of each teacher's students on a receptive vocabulary test (Peabody Picture Vocabulary Test-3rd edition). 
+
+Details on all variables are as follows:
+
+ * *tchid*, the teacher's unique identification number.
+ * *treat*, consultancy treatment indicator, coded 1 if the teacher was in the treatment group (participated in consultancy PD), coded 0 if the teacher was in the control group.  
+ * *coursework*, continuous integer measure of how many sessions the teacher participated in the coursework. 
+ * *vocabulary*, the average score of the teacher's students on a vocabulary test. 
+
+### Assignment Details
+
+#### 1. Dataset
+
+1.1. Open your RStudio, create a project and save it. Go to the root directory of the project and create folders named: "Code", "Data", "Figures" and "Tables." Download the [cont.csv dataset](../data/cont.csv) and store it in the folder "Data". Create an R script (or .Rmd) file in the Code folder. Read the data into your R environment. You do not need to include this part of the response in your memo; only in your code.
+
+Review the codebook above and transform any variable into its correct type (format), as needed. **(1 point)**
+
+
+1.2. Write your own code to view the structure of the dataset and write 3-4 sentences about the structure of the data. How many rows/observations are there? How many variables are there? What type is each variable (after converting types)? What does each variable represent? **(1 point)**
+
+#### 2. Descriptive statistics of the outcome variable
+
+**Central tendency**
+
+ * 2.1 What are the mean and median of *vocabulary*? In 2 sentences, interpret the meaning of these measures. **(1 point)**
+
+ * 2.2 What are the mean and median of *coursework*? You will find that the mean is a smaller value than the median. In 1-2 sentences, explain why this is the case. **(1 point)**
+
+**Variability** 
+
+ * 2.3. Create a plot to show the distribution of *vocabulary* and make sure to label the x- and y-axes. In 2-4 sentences, describe the distribution, referencing your plot as appropriate. Make sure to use the following terms: tail(s), skew, kurtosis, mound/modal. **(2 points)** 
+ 
+ * 2.4. What are the range and inter-quartile range of *vocabulary* (provide both the upper/lower limits as well as the ranges themselves). **(1 points)**
+ 
+ * 2.2.3. What are the variance and standard deviation of *vocabulary*? In 1 sentence, interpret the statistical meaning of these measures. **(1 point)**
+
+
+#### 3. Transformations
+
+  * 3.1. Standardize the variables *coursework* **and** *vocabulary* to have a mean of 0 and standard deviation of 1. You do not need to include this part of the response in your memo; only in your code. **(1 point)**
+  
+  * 3.2. Let's examine one particular teacher: Teacher 1832 (*tchid*==1832). This teacher did not participate in much coursework, nor did their students perform particularly well on their vocabulary test. For which variable (*coursework* or *vocabulary*) was this teacher observation more extreme, given the  distribution of these particular variables in our sample? Explain and interpret in 1-2 sentences **(1 point)**
+
+#### 4. Compare observed mean of *vocabulary* to population mean
+
+Assume that the test publisher informs you that the population mean of the teacher-level average score on this vocabulary test is 87 (again, we can't truly know this, but play along). We want to know whether the observed mean of *vocabulary* in our sample is equal to the population mean.
+
+ * 4.2. In one sentence, state your null-hypothesis. **(1 point)**
+ * 4.2. Conduct a one-sample $t$-test. State the results of your test, including the alpha-threshold you have set and whether you have conducted a one- or two-tailed test and why. **(2 points)**
+ * 4.3. Write 2-3 sentences to interpret the results of your test in the preceding question. **(2 points)**

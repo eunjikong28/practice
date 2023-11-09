@@ -1,0 +1,94 @@
+---
+title: "EDUC 641 Assignment 5"
+subtitle: "(Final Project)"
+output: html_document
+---
+```{R, setup, include = FALSE}
+if (!require(pacman)) install.packages('pacman', repos = 'https://cran.rstudio.com')
+pacman::p_load(here, tidyverse, ggplot2, xaringan, knitr, kableExtra)
+
+opts_chunk$set(include = FALSE)
+```
+
+
+### General Guidelines
+
+The purpose of this assignment is to practice the concepts and vocabulary we have been modeling in class and implement some of the techniques we have learned. You may work on your own or collaborate with a partner. Please make sure that you engage in a a full, fair and mutually-agreeable collaboration if you do choose to collaborate. If you do collaborate, you should plan, execute and write-up your analyses together, not simply divide the work. Please make sure to indicate clearly when your work is joint and any other individual or resource (outside of class material) you consulted in your responses.
+
+### Submission Requirements
+
+Please upload below two files on Canvas by **December 7th at 11:59pm**:  
+
+1. An .html, .doc(x) or .pdf file that includes your typed responses (in your own words and not identical to anybody else's except your partner), tables, and/or figures to the problems
+2. The .Rmd or .R file that you used to render the tables and figures in the above html/pdf. 
+
+*If you have prior experience, you may choose to compose your answers in RMarkdown and render to a Word doc or pdf. If so, you can simply set up echo = TRUE and include = TRUE in your .Rmd file to allow both code and answers to display in a single output file. If you have no idea what the preceding sentence meant, ignore it.*  
+
+### Objectives of this assignment
+
+ * Synthesize descriptive and relational analysis of categorical and continuous variables
+
+ * Apply analytic methods to authentic research questions
+
+### Data Backgroud
+
+The dataset we'll be using in this assignment is drawn from the third and fourth waves of National Longitudinal Study of Adolescent to Adult Health ([Add Health](https://addhealth.cpc.unc.edu/data/#public-use)) public-use data. Add Health is a longitudinal study of a nationally representative sample of over 20,000 adolescents (the public-use data sample is much smaller in size) who were in grades 7-12 during the 1994-95 school year. It contains rich demographic, social, familial, socioeconomic, behavioral, psychosocial, cognitive, and health information. When the third (2001) and fourth (2008) waves took place, the participants were aged from 18-26 and from 24-32, respectively.
+
+In a recent working paper, [Kraft et al. (2021)](https://www.edworkingpapers.com/ai21-441) examined an understudied area: the pathway through which informal mentoring relationships between students and school personnel influences children's skill development and future life opportunities. In particular, they found that students with a school-based mentor go on to receive high-school grade-point averages that are 0.24 points higher than peers without a mentor, they complete a full year of additional education, and they experience between \$60,600 and \$92,400 more in lifetime earnings. 
+
+
+### Research Questions
+
+Inspired by Kraft et al., we examine whether and to what extent having a school-based mentor in one's schooling trajectory is related to these outcomes. In this final project, we invite you to investigate **THREE** research questions. Everyone will address Question 1 (using the [ah01.csv dataset](../data/ah01.csv)). You will pick either Question 2 or 3, using the same dataset. Then, you will extend Kraft et al. by choosing one of Questions 4 or 5 (using the [ah02.csv dataset](../data/ah02.csv)). The research questions you will tackle are:
+
+**REQUIRED**:
+
+1. Is there a relationship between having a school-based mentor and earning an overall high-school GPA above 3.0?
+
+**PICK ONE (1)**:
+
+2. Do individuals who have a school-based mentor have an overall high-school GPA different from the population mean of those who do not have a mentor (*assume this value is 2.4*)?
+
+3. Do individuals who have a school-based mentor complete total years of education different from the population mean of those who do not have a mentor (*assume this value is 14.7*)?
+
+
+**PICK ONE (1)**:
+
+4. To what extent is the age at which an individual connects with a school-based mentor related to their overall high-school GPA?
+
+5. To what extent is the age at which an individual connects with a school-based mentor related to their total years of education?
+
+
+### Sample
+
+The dataset you'll be using is individual-level data for Add Health participants who have no missing data on our variables of interest in both waves 3 and 4. Note that for simplifying reasons, we use smaller datasets than Kraft et al does and the measures of predictor and outcome variables are slightly different. To be explicit, ah01 includes all participants in AddHealth (both those who did and did NOT have mentors); ah02 includes only those who had mentors. For simplifying reasons, we have not joined these data so that you don't have missing values for *mentee_age*. Also we do not ask you to fit the fixed-effects models in Kraft et al. As a result, you should proceed with even more caution than the Kraft et al. team in making causal interpretations of these results. 
+
+### Key variables
+
+ * *id*: the individual's unique identification number.
+ 
+ * *mentor*, binary variable, coded 1 for individuals who reported having a school-based mentor (teachers, guidance counselors, administrators, coaches, athletic directors, etc.) and zero otherwise. This variable exists only in ah01.csv dataset.
+ 
+ * *mentee_age*: the individual's age when the mentor started to have an impact in their life. This variable exists only in ah02.csv dataset.
+ 
+ * *education*: the individual's total years of education (re-coded from Add Health data using the same approach in Kraft et al., p. 14).
+ 
+ * *gpa*: the individual's final high school GPA
+ 
+ * *gpa_3*: binary variable coded 1 for individuals whose final high-school GPA was above 3.0
+
+### Assignment Details
+
+Your final project include a 3-4 paragraph write up of the analysis, results, and discussions of EACH of your THREE research questions. For each question, the write-up should contain the following elements:
+
+1. A statement of your research question and null hypothesis. **(1 point each)** 
+
+2. A presentation of the summary statistics of only the variables you will be using for this analysis in table(s). The tables should include the sample size, the mean and standard deviation of continuous variables, and the percentage for each category of categorical variables. Based on the statistics in the table, describe what you observe in your data. **(2 points each)**
+
+3. Visualize the relationship between the variables in your data in a plot and describe what you observe. **(3 points each)**
+
+4. Describe your analytic method (what tests will you conduct?), report your results (for RQs 4 & 5 this may include presenting a results table), interpret the findings (in each case determining whether you should reject or fail to reject the null hypothesis), and substantively interpret your findings. **(4 points each)**
+
+
+
+

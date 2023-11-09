@@ -1,0 +1,59 @@
+name: EDUC 641
+output_dir: "."
+navbar:
+  title: "EDUC 641"
+  
+  left:
+  - text: Syllabus
+    href: syllabus.html
+  - text: Schedule
+    href: schedule.html
+  - text: Lectures
+    menu: 
+      - text: "1. Intro & research design"
+        href: ./slides/EDUC641_1_intro.html
+      - text: "2. Measurement"
+        href: ./slides/EDUC641_2_measures.html
+      - text: "3. Categorical descriptives"
+        href: ./slides/EDUC641_3_categdescr.html
+      - text: "4. Categorical relationships I"
+        href: ./slides/EDUC641_4_categrel.html
+      - text: "5. Categorical relationships II"
+        href: ./slides/EDUC641_5_categrel.html
+      - text: "6. Troubling history of stats"
+        href: ./slides/EDUC641_6_history.html
+      - text: "7. Continuous descriptives I"
+        href: ./slides/EDUC641_7_continuousdescr.html
+      - text: "8. Continuous descriptives II"
+        href: ./slides/EDUC641_7_continuousdescr.html
+      - text: "9. Transformations and z-scores"
+        href: ./slides/EDUC641_9_transformations.html
+      - text: "10. Normal distributions"
+        href: ./slides/EDUC641_10_inference.html
+      - text: "11. CLT"
+        href: ./slides/EDUC641_10_inference.html
+      - text: "12. Z- and t-tests"
+        href: ./slides/EDUC641_10_inference.html
+      - text: "13. Continuous relationships I"
+        href: ./slides/EDUC641_14_continuousrel.html
+      - text: "14. Bivariate regression I"
+        href: ./slides/EDUC641_15_regression.html
+      - text: "15. Bivariate regression II"
+        href: ./slides/EDUC641_16_residuals.html
+      - text: "16. Regression assumptions"
+        href: ./slides/EDUC641_16_residuals.html
+      - text: "17. NHST critiques"
+        href: ./slides/EDUC641_17_critiques.html
+      - text: "18. NHST critiques and summary"
+        href: ./slides/EDUC641_17_critiques.html
+
+  right:
+  - text: Assignments
+    href: assignments.html
+  - icon: fa-github
+    href: https://github.com/uo-educ-quant/641
+
+output:
+  html_document:
+   lib_dir: site_libs
+   self_contained: no

@@ -1,0 +1,144 @@
+---
+title: "Troubling History of Statistics"
+subtitle: "EDUC 641: Unit 2"
+author: "David D. Liebowitz"
+#date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'uo', 'ki-fonts', 'my_custom.css', 'xaringanthemer.css']
+        # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{R, setup, include = F}
+library(pacman)
+p_load(here, tidyverse, ggplot2, xaringan, knitr, kableExtra, xaringanthemer)
+
+i_am("slides/EDUC641_6_history.rmd")
+
+
+red_pink <- "#e64173"
+turquoise = "#20B2AA"
+orange = "#FFA500"
+red = "#fb6107"
+blue = "#3b3b9a"
+green = "#8bb174"
+grey_light = "grey70"
+grey_mid = "grey50"
+grey_dark = "grey20"
+purple = "#6A5ACD"
+slate = "#314f4f"
+
+extra_css <- list(
+  ".red"   = list(color = "red"),
+  ".blue"  =list(color = "blue"),
+  ".red-pink" = list(color= "red_pink"),
+  ".grey-light" = list(color= "grey_light"),
+  ".purple" = list(color = "purple"),
+  ".small" = list("font-size" = "90%"))
+
+write_extra_css(css = extra_css, outfile = "my_custom.css")
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 6.75,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+options(knitr.table.format = "html")
+
+```
+class: middle, inverse
+
+# Quiz
+
+---
+# Goals of the class
+
+.large[
+- Describe the eugenic and racist origins of statistics
+- Articulate implications of the history of the development of statistics for the present-day practice of quantitative analysis
+- State principles of QuantCrit analysis and how these might inform research practices
+]
+---
+# Reading Discussion
+.small[
+Form groups of three with one member from each last name band: A-H, I-P, Q-Z and assign a timekeeper. In turn, each member summarizes key points from "their" article (2 minutes each).
+]
+
+Then, independently review the Clayton (2000) article (2 minutes) and be prepared to discuss the following questions:
+
+### Four "A"s Protocol<sup>1</sup>:
+1. What **assumptions** does the author hold?
+2. What do you **agree** with in the text?
+3. With what do you want to **argue** in the text?
+4. To what does the text make you **aspire**?
+
+Each person in turn states their answer to question 1, citing examples from text as appropriate. Group does not respond or comment, but actively listens and takes notes. (1 minute per person, 3 minutes per round).
+
+
+.footnote[[1] National School Reform Faculty. (2015). Four A's Text Protocol. Harmony Education Center.]
+
+--
+Repeat four times with each of the 4 A questions.
+
+--
+
+Then, open small group discussion about these questions and more (15 minutes). We'll debrief as a full class after!
+
+---
+# Principles of QuantCrit
+
+The core (evolving) principles of Quantitative Critical Race Theory:<sup>1, 2</sup>
+1. Centrality of racism in all social processes
+  + Positionality statement
+  + Asset orientation
+2. Numbers are not neutral
+  + Choose who is included (and not) carefully
+  + Model selection
+3. Categories are neither "natural" nor given; for race, read racism
+  + Informed categories
+4. Data cannot "speak for itself"
+  + Contextualize results
+5. Social justice/equity orientation
+  + How do results work towards disrupting inequity?
+  + Data rights
+
+.footnote[[1] Gillborn, D., Warmington, P. & Demack, S. (2018). QuantCrit: education, policy, "Big Data" and
+principles for a critical race theory of statistics, *Race Ethnicity and Education, 21*(2), 158-179. [2] Castillo, W. & Gillborn, D. (2022). How to "QuantCrit": Practices and questions for education data researchers and users. (EdWorkingPapers: 22-546). Retrieved from Annenberg Institute at Brown University.]
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+---
+# Goals of the class
+
+.large[
+- Describe the eugenic and racist origins of statistics
+- Articulate implications of the history of the development of statistics for the present-day practice of quantitative analysis
+- State principles of QuantCrit analysis and how these might inform research practices
+]
+
+---
+# To-Dos
+
+### Optional follow-up
+- Complete R Bootcamp Module 8 (dataframes)
+
+### Assignments
+- Assignment #2 Due October 19, 11:59pm
+
+--
+
+.red[*Midterm Student Experience Survey next week*]
+

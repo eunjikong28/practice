@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Transformations and z-scores</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="David D. Liebowitz" />
+    <script src="EDUC641_9_transformations_files/header-attrs/header-attrs.js"></script>
+    <link href="EDUC641_9_transformations_files/remark-css/default.css" rel="stylesheet" />
+    <link href="EDUC641_9_transformations_files/remark-css/uo.css" rel="stylesheet" />
+    <link href="EDUC641_9_transformations_files/remark-css/ki-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringanthemer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Transformations and <span class="math inline"><em>z</em></span>-scores
+]
+.subtitle[
+## EDUC 641: Unit 3 Part 2
+]
+.author[
+### David D. Liebowitz
+]
+
+---
+
+
+
+
+
+
+# Roadmap
+
+&lt;img src="Roadmap_3.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+---
+# Class goals
+
+.large[
+- Construct a standardized or `\(z\)`-score and explain its substantive meaning
+- Use a `\(z\)`-transformation to compare distributions, observations within distributions and interpret outlying values
+- Be prepared for future use of `\(z\)`-transformations in analysis
+]
+
+---
+# A "standard" deviation
+
+The standard deviation (s) represents the **positive square root of the variance**.&lt;sup&gt;1&lt;/sup&gt;
+
+`$$s = \sqrt{\frac{\Sigma_{i=1}^n(x_i-\bar{x})^2}{N}}$$`
+
+.footnote[[1] This is actually not quite right. When calculating a sample statistic of the variance or standard deviation, the denominator in the above equation is actually *N*-1. We will learn why when we get to *degrees of freedom* in the next unit.]
+
+
+--
+
+**Steps:**
+1. Subtract the mean from each observation in your data (this number is the deviation from the mean)
+2. Square each resulting difference
+3. Add up all of the squared deviations
+4. Divide by the total number of observations
+5. Take the square root `\(\rightarrow\)` standard deviation
+
+---
+# A common metric
+* .small[A distribution can have any mean and any (positive) standard deviation.]
+
+
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+* .small[Sometimes it is helpful to "standardize" a distribution to a common mean and standard deviation so we can more easily compare them (and understand outlying values).]
+
+--
+
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# `\(Z\)`-transformations
+* The most common transformation is a `\(z\)`-transformation. 
+* A z-transformation re-scales the distribution to a mean `\((\mu)\)` of 0 and a standard deviation `\((\sigma)\)` of 1.
+
+
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Z-transformations
+* Any score and distribution can be standardized using a simple algorithm.
+
+* Each observation `\((i)\)` is transformed into a **z-score** using the following formula:
+
+`$$z_{i} = \frac{x_{i} - \mu}{\sigma}$$`
+
+* A z-score is calculated by **subtracting the mean** from each value and **dividing by the standard deviation**.
+
+* An observation's z-score value is equal to its distance from the mean, in standard deviation units.
+
+--
+
+* Some fun facts about z-scores
+  + `\(\Sigma z_i = 0\)`
+  + `\(\Sigma z_i^2 = N\)`
+
+---
+# Transformed distributions
+
+Here is a histogram of our life expectancy data.
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+We are going to create a new variable called `life_expectancy_zscore` using the formula described on the previous slide.
+
+```r
+who$life_expectancy_zscore &lt;- 
+  (who$life_expectancy - mean(who$life_expectancy)) /
+        sd(who$life_expectancy)
+```
+
+---
+# The new distribution
+
+```r
+## Histogram of the new z-scores
+hist(who$life_expectancy_zscore)
+```
+
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+We now have a mean of 0 and standard deviation of 1.
+
+
+---
+# "Transforming" vs. "normalizing"
+
+An important note about standardizing a distribution is that it changes the mean and standard deviation, but **does not change the overall shape.**
+
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+# You try
+
+&gt; Given the following set of observed value (75, 74, 66, 78, 73, 78), perform a `\(z\)`-transformation. What are the resulting `\(z\)`-scores?
+
+---
+# How has this helped?
+
+So we started with the promise that "transforming" (or "standardizing") a distribution would help us to better understand the "distance" that a given observation is from the center of the distribution and that `\(z\)`-scores allow us to compare across units of measurement.
+
+Let's say we are interested in the life expectancy in a particular country and how this compares to both the average life expectancy and the distribution of life expectancies. For convenience, say Canada:
+
+
+```r
+mean(subset(who$life_expectancy, 
+            who$region == "Canada"))
+```
+
+```
+## [1] 82
+```
+
+```r
+mean(who$life_expectancy)
+```
+
+```
+## [1] 71.63934
+```
+
+--
+.blue[**How different is life expectancy in Canada compared to our sample average?**]
+
+--
+
+.blue[*Ok, but how different are these two numbers?*]
+
+--
+And how different is Canada from the life-expectancy sample mean as compared to its difference from countries' average years of schooling?
+
+---
+# How has this helped?
+
+Life expectancy:
+
+```r
+mean(subset(who$life_expectancy, 
+            who$region == "Canada"))
+```
+
+```
+## [1] 82
+```
+
+```r
+mean(who$life_expectancy)
+```
+
+```
+## [1] 71.63934
+```
+
+--
+
+Canadian schooling:
+
+```
+## [1] 16.3
+```
+Average schooling:
+
+```
+## [1] 12.92717
+```
+
+---
+# Comparing on common metric
+
+Now let's compare `\(z\)`-scores
+
+
+```r
+mean(subset(who$life_expectancy_zscore, 
+            who$region == "Canada"))
+```
+
+```
+## [1] 1.271178
+```
+
+
+
+
+```r
+mean(subset(who$schooling_zscore, 
+            who$region == "Canada"))
+```
+
+```
+## [1] 1.158107
+```
+
+--
+
+.blue[**Is Canada more unusual with respect to its schooling or life expectancy?**]
+
+---
+# Comparing on common metric
+
+&lt;img src="EDUC641_9_transformations_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Outliers
+
+.small[Compare the raw life expectancy to the standardized ones to get a better sense of outlying values:]
+
+
+```r
+mean(who$life_expectancy, na.rm=T)
+```
+
+```
+## [1] 71.63934
+```
+
+```r
+head(sort(who$life_expectancy))
+```
+
+```
+## [1] 51 52 52 53 53 54
+```
+
+```r
+tail(sort(who$life_expectancy))
+```
+
+```
+## [1] 83 84 85 85 86 88
+```
+
+--
+
+.blue[Are these extreme values a lot or a little away from the mean, given the rest of the distribution?]
+
+---
+# Outliers
+.small[Compare the raw life expectancy to the standardized ones to get a better sense of outlying values:]
+
+```r
+head(sort(who$life_expectancy_zscore))
+```
+
+```
+## [1] -2.532299 -2.409606 -2.409606 -2.286913 -2.286913 -2.164220
+```
+
+```r
+tail(sort(who$life_expectancy_zscore))
+```
+
+```
+## [1] 1.393870 1.516563 1.639256 1.639256 1.761949 2.007334
+```
+
+---
+# Effect sizes
+
+Careful&lt;sup&gt;1&lt;/sup&gt; standardization of continuous variables will permit:
+* Common understanding of any individual observation's distance from the center of the distribution, across variables
+* Ease of identifying outlying values
+* Ability to understand the standard normal distribution (next!)
+* Conduct a `\(z\)`-test (next!)
+* Calculation of magnitude of continuous relationships in a common metric known as the .blue[**effect size**]&lt;sup&gt;2&lt;/sup&gt;
+
+
+.footnote[[1] "Careful" because the distribution within which you standardize the variable has important implications for the transformation and the resulting analysis you will do. 
+
+[2] *Further thoughts for those interested*: the .blue[**correlation coefficient**] is a standardized effect size which can be used communicate the strength of a relationship. We will examine the correlation coefficient and the related concept of .blue[**effect size**] further in EDUC 643 this winter.]
+
+
+---
+class: middle, inverse
+
+# Mid-term SES results
+
+### Response rate: 38 percent (11/29)
+
+---
+# Quantitative results
+
+.pull-left[
+**Generally positive:**
+(&gt;=70% rate as beneficial)
+* Inclusivity
+* Support from instructors
+* Feedback provided
+* Quality of course materials
+* Communication
+* Organization
+* Relevance of content
+* Assignments/projects
+* Accessibility
+]
+
+.pull-right[
+**Generally insufficient:**
+(&lt;70% rate as beneficial)
+* Level of challenge
+* Clarity of assignment instructions/grading
+* Active learning
+* Student interaction
+]
+
+--
+
+There are diverging opinions within each of these categories, and so important to attend to ways in which these broad-stroke patterns are not true for all individuals.
+
+---
+# Qualitative results
+
+.pull-left[
+**Helpful:**
+* Take feedback &amp; adjust
+* Explanation of concepts
+* Feedback on how to improve
+* Response to students' questions
+* Generally supportive
+* Readings and class website
+]
+
+.pull-right[
+**Need improvement/suggestions:**
+* Demeanor/expression in class
+* 5 minutes to ask general questions
+* Follow existing formats for learning R/more time learning R/more focus on R
+* Clarity of quizzes
+* More explicit/direct instruction
+* Over-explanation of concepts `\(\rightarrow\)` confusion
+]
+
+---
+# Action steps
+
+1. Time for stats/programming questions (as much as possible)
+2. Practice explanation of concepts beforehand to improve clarity
+3. Improve quiz structure
+4. Increase opportunities for practice and student-student interaction
+
+&lt;br&gt;
+
+
+--
+
+*Maintain primary focus of course on developing (applied) statistical and analytic toolkit with a secondary focus on application of these skills in the R programming language, following the syllabus as approved by your advisors and program directors via the College of Education curriculum Committee.*
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+---
+# Class goals
+
+.large[
+- Construct a standardized or `\(z\)`-score and explain its substantive meaning
+- Use a `\(z\)`-transformation to compare distributions, observations within distributions and interpret outlying values
+- Be prepared for future use of `\(z\)`-transformations in analysis
+]
+
+---
+# To Dos
+
+### Quiz 3
+- Opens 3:45pm on Oct. 27, closes at 5pm on Oct. 28
+
+### Assignments
+- Assignment #3 due November 7, 11:59pm
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

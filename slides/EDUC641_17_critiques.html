@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Null-Hypothesis Significance Testing (NHST) critiques</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="David D. Liebowitz" />
+    <script src="EDUC641_17_critiques_files/header-attrs-2.14.3/header-attrs.js"></script>
+    <link href="EDUC641_17_critiques_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="EDUC641_17_critiques_files/remark-css-0.0.1/uo.css" rel="stylesheet" />
+    <link href="EDUC641_17_critiques_files/remark-css-0.0.1/ki-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringanthemer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Null-Hypothesis Significance Testing (NHST) critiques
+]
+.subtitle[
+## EDUC 641: Unit 5
+]
+.author[
+### David D. Liebowitz
+]
+
+---
+
+
+
+
+
+# Goals of the unit
+
+- Articulate modern critiques of null-hypothesis significance testing framework
+- Describe strategies to improve replicability and generalizability of quantitative research
+
+---
+# Critiques of NHST
+
+.large[**Two lines of criticism:**]
+
+.large[
+1. Concerns about generalizability and "statistical significance"
+2. A different way of thinking about probability (Bayesian)
+]
+
+---
+# Generalizability
+
+### Research in WEIRD countries
+- In 2015, 92 percent of all papers in developmental psychology featured participants from English-speaking countries and non-English-speaking Europe&lt;sup&gt;1&lt;/sup&gt;
+- In general, in social science much of our knowledge base comes from research conducting on participants living in Western, educated, industrialized, rich and democratic **(WEIRD)** nations
+
+### Non-representative samples
+- Even in WEIRD countries, many samples are not representative of the national population
+ + University students (at highly research-active universities)
+ + Non-Hispanic, White and male patients more likely to be included in clinical trials
+ + Convenience sampling (especially in intervention and survey research)
+ + Non-stratified samples prevents conclusion being drawn about low-*n* groups
+- Small samples are particularly at risk for returning idiosyncratic estimates
+
+.footnote[[1] Nielsen, M. Haun, D. Kartner, J &amp; Legare, C. (2017). The persistent sampling bias in developmental psychology: A call to action. *Journal of Experimental Child Psychology, 162*, 31-38.]
+
+--
+
+**Learn more about all of this in EDUC 612 and 646!!**
+
+---
+class: middle, inverse
+
+# Problems with "statistical significance"
+
+---
+# Problems with "significance"
+
+An explosion of [academic](https://www.tandfonline.com/toc/utas20/73/sup1?nav=tocList) and [popular press](https://www.nytimes.com/2015/08/28/science/many-social-science-findings-not-as-strong-as-claimed-study-says.html) attention to the "replication crisis" emerged in the early 2010s. 
+
+
+---
+# Failure to reproduce
+
+Replication work often seen as un-original; weak incentives to conduct replications.
+
+Many replications fail:
+.small[
+- New contexts
+- Incomplete communication of treatment and conditions
+  + Missing protocol, methodological or data management details
+  + Incomplete specification of sequence of tests
+- Disagreement as to what "counts" as a replication
+  + **In design:** Exact replication, conceptual replication, replication + extension
+  + **In outcome:** 
+]
+
+&lt;img src="anderson2016.png" width="668" style="display: block; margin: auto;" /&gt;
+
+.footnote[Anderson, S. &amp; Maxwell, S. (2016). There's more than one way to conduct a replication study: Beyond statistical significance. *Psychological Methods, 21*(1), 1-12.]
+
+---
+# Problems with significance
+
+Some problems with the binary decision-making process of NHST include:
+- Statistical significance as a condition for publication and a goal for researchers
+ + `\(\rightarrow\)` Publication bias: "successes" are published; "failures" end up in file drawers
+- Novelty as a condition for publication in top-tier journals
+ + If something is "unexpected" or "surprising" there's a decent chance it might not be true
+- Frequent imprecise estimates of "differences" between groups, with little interest in quantifying the magnitude of the differences
+- Weak theory driving analysis: 
+ + No non-null hypotheses
+ + No prior belief about likelihood of findings
+ + Hypothesis After the Results are Known (HARK-ing)
+- Outright manufactured data/analysis
+
+---
+# Problems with "significance"
+
+If *p*&lt;0.05 is the goal, there are many ways to get there. 
+
+This can be the product of intentional "*p*-hacking" or "researcher degrees of freedom" (explore your data, test many different models, try this variable, etc.)
+
+--
+
+At the core of this problem is the need to balance (avoid) two types of inference errors 
+
+|               | **Reject `\(H_0\)`**        | **Fail to reject**
+|--------------------------------------------------------------------
+| `\(H_0\)` = true  | .red-pink[Type I error] | .green[Correct decision]
+| `\(H_0\)` = false | .green[Correct decision]| .red-pink[Type II error]
+
+--
+
+The rate of false positives (.red-pink[**Type I errors**]) is equal to your `\(\alpha\)`-threshold. You choose this rate. 
+
+---
+# NHST and the trap of `\(p&lt;0.05\)`
+
+If you set the goal at 0.05 (or 0.01 or 0.001), that's what you'll get:
+
+&lt;img src="z_stats.png" width="600" height="80%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Brodeur, A., Cook, N. &amp; Heyes, A. (2020). Methods matter: p-Hacking and publication bias in causal analysis in economics. *American Economic Review, 110*(11), 3634-3660.]
+
+---
+# What should that distribution be?
+
+.pull-left[
+&lt;img src="z_stats.png" width="600" height="80%" style="display: block; margin: auto;" /&gt;
+**What we observe**
+]
+
+.pull-right[
+
+
+&lt;img src="EDUC641_17_critiques_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+`\(H_0\)` false, 10,000 simulations, `\(N=30, \mu=0.2, \sigma=1\)`
+]
+
+
+---
+# Open Science alone won't save us
+
+&lt;img src="pre_reg.png" width="823" style="display: block; margin: auto;" /&gt;
+
+.footnote[Brodeur, A., Cook, N. Hartley, J. Heyes, A. (2022). Do pre-registration and pre-analysis plans reduce p-hacking and publication bias?]
+
+---
+## Dangers of multiple hypothesis testing
+
+If your goal is to find a "statistically significant" result, you will detect such a relationship 1 out of 20 times (on average).
+
+Imagine rolling a die. .blue[What is the probability you roll a 1?]
+
+--
+`\(1/6 = 0.167\)`
+
+--
+
+Now, roll it twice, .blue[what is the probability **at least** one of your rolls is a 1?]
+
+--
+`\(1 - (5/6 * 5/6) = 0.306\)`
+
+--
+
+If you conduct enough tests, you'll detect a relationship eventually.
+
+---
+# One fix
+
+Instead of using `\(\alpha=0.05\)` for each individual test, use `\(\alpha=0.05\)` for the **family of tests** when we examine multiple contrasts to test a single hypothesis. 
+
+.pull-left[
+## Bonferroni method
+Take a given `\(\alpha\)`-threshold and "split it" across the entire family of tests. Assuming `\(\alpha = 0.05\)`:
+- For 2 tests, conduct each at 0.025 level;
+- For 3 tests, conduct each at 0.0167 level; etc. ...
+
+Use this new threshold to identify the critical `\(t\)`-statistic given the number of degrees of freedom.
+
+.red-pink[*Other approaches exist! Bonferroni is an extremely conservative one--beware!*]
+]
+
+.pull-right[
+As tests increase, so do critical `\(t\)`-values:
+
+| # tests | # new `\(\alpha\)` | `\(t\)`-statistic (df = `\(\infty\)`)
+|-------------------------------------------------------------
+| 1 | 0.0500 | 1.96
+| 2 | 0.0250 | 2.24
+| 3 | 0.0167 | 2.39
+| 4 | 0.0125 | 2.50
+| 5 | 0.0100 | 2.58
+| 6 | 0.0083 | 2.64
+| 10| 0.0050 | 2.81
+| 20| 0.0025 | 3.02
+| 50| 0.0010 | 3.29
+|100| 0.0005 | 3.48
+
+]
+---
+# Type II error
+
+.red[**Equally important**] as the rate of false positives is the number of false negatives (.red-pink[**Type II errors**]) you're going to get. .blue[**Why do we care about this? Why not just set**] `\(\color{blue}{\alpha = 0.00000001}\)`.blue[?]
+
+--
+
+Failure to detect an effect when there is one there is just as important (but more often ignored) of a concern. Under-powered studies (studies that suffer from a high-likelihood of Type II error) have just as much potential to mis-inform us about the relative value of a particular intervention, practice or policy.
+
+Type II error depends on the magnitude of the effect, the number of observations, the total variation in your variables, and the amount of the variation in the outcome you can explain. 
+
+---
+# Other data and analysis challenges
+
+Small, subjective researcher choices *can* have meaningful effects on results of study. 
+
+Take the "Many Analysts"&lt;sup&gt;1&lt;/sup&gt; project in which 29 teams used the same dataset to address the same question: "Are soccer referees more likely to give red cards to dark-skin-toned players than to light-skin-toned ones?"
+
+- Estimated effect sizes ranged from 0.89 to 2.93 (in odds-ratio units)
+- 20 teams found a "significant" effect, 9 did not
+
+.footnote[[1] Silberzahn, R. et al. (2018). Many analysts, one data set: Making transparent how variations in analytic choices affect results. *Advances in Methods and Practices in Psychological Science, 1*(3), 337-356.]
+
+--
+
+.purple[Critically, these were all studies done with the **exact same data** and the **exact same research question**!]
+
+---
+# Other data and analysis challenges
+
+Never **EVER** use Excel to read in your data
+&lt;img src="gene_name.png" width="440" style="display: block; margin: auto;" /&gt;
+
+--
+More importantly, without being able to observe researcher decisions in their code, we can't assess the reasonableness of choices and the potential for replication. .red-pink[**We need to learn how to code and not just point-and-click for Open Science.**]
+
+---
+# The convoluted logic of NHST
+
+Many of the preceding issues result from the fundamentally convoluted rationale of the null-hypothesis significance testing approach. An example:
+
+Assume that we find that average national life expectancy is significantly greater in high-income countries compared to low-income countries. With an `\(\alpha\)` of .05, the (hypothetical) statistical test returns *p* = .03, meaning we can reject the null hypothesis.
+
+.blue[**Which of the following statements is correct, given *p* = .03**]:
+* **A.** There is a 3% probability that high-income countries do not have a higher average life expectancy (the null hypothesis).
+* **B.** There is a 3% probability that the results are due to sampling idiosyncrasy, rather than a true relationship in the population.
+* **C.** A statistically significant difference means higher income-levels yield higher life expectancies.
+* **D.** The observed data would occur 3% of the time if the null hypothesis were true.
+* **E.** Previous research found that in 2005, income-level was not related to average life expectancy (*p* = .17). Therefore, income-level is more stronyl related to life expectancy in 2015 than in 2005.
+* **F.** Another research group finds a statistically significant difference between countries with socialized medicine compared to those without (*p* = .001). Their smaller *p* value means that socialized medicine is more effective at increasing life expectancy than income level.
+
+---
+# The convoluted logic of NHST
+
+.red-pink[**Only D on the previous slide is correct, yet all of these are commonly expressed in the scientific literature!**]
+
+In frequentist statistics, we establish an **objective decision rule**: if our observed data has less than a 5 percent chance of occurring (or less than 1% or less than 0.1% or less than 10%) due to sampling idiosyncrasy, we will conclude that the observed relationship in the sample represents a true relationship in the population. 
+
+- Once we set a threshold (an `\(\alpha\)`-theshold), we are making a binary decision about significance and non-significance
+- Relationships are *NOT* "more" or "less" significant&lt;sup&gt;1&lt;/sup&gt; 
+ + In fact, the distribution of *p*-values under the null hypothesis is a uniform one; thus, it's not correct to describe observed vs. expected probabilities in relationship to each other (e.g., a *p*-value of 0.01 is **not** three times less likely than a *p*-value of 0.03). 
+- This has become such an issue that in 2016, the American Statistical Association released a [statement](https://amstat.tandfonline.com/doi/pdf/10.1080/00031305.2016.1154108) touching on many of these issues, and a subset of committee members explicitly recommended to not use the term ["statistically significant"](https://www.tandfonline.com/doi/full/10.1080/00031305.2019.1583913)
+
+.footnote[[1] This is the classical/standard way of thinking about inference. More recently, scholars have begun to question this way of thinking and consider this sort of comparison appropriate.]
+
+--
+- Many of these concerns relate to different ways of thinking about probability...
+
+---
+class: middle, inverse
+
+# Bayesian probability and inference
+
+---
+# (Very) brief intro to probability
+
+**Two common ways to think about probability: the long-run view (frequentist) and priors (Bayesian)**
+
+- **Frequentist:**
+- With a known long-run outcome (e.g., a fair coin comes up heads half the time), we can consider the likelihood of a given short-run event
+ + A coin flipped twice will come up Heads both times with a probability of 0.25 (fairly likely); but a coin flipped 20 times will come up Heads every time with a probability of 0.000000095 (very unlikely)
+ + In the short-run, you can expect some variability, but in the long run, it will converge to the known distribution
+
+&lt;img src="EDUC641_17_critiques_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Probability and testing `\(H_{0}\)`
+
+We are asking how likely is it that we observe event X happening with Y frequency, if the expected probability of X happening is Z?
+
+.blue[**Imagine you were handed a coin and asked to determine whether it was weighted to one side. How certain would you be after 50 flips?**]
+
+&lt;img src="EDUC641_17_critiques_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Probability and testing `\(H_{0}\)`
+
+We are asking how likely is it that we observe event X happening with Y frequency, if the expected probability of X happening is Z?
+
+.blue[**Imagine you were handed a coin and asked to determine whether it was weighted to one side. How certain would you be after 200 flips?**]
+
+&lt;img src="EDUC641_17_critiques_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Probability and testing `\(H_{0}\)`
+
+We are asking how likely is it that we observe event X happening with Y frequency, if the expected probability of X happening is Z?
+
+.blue[**Imagine you were handed a coin and asked to determine whether it was weighted to one side. How certain would you be after 2000 flips?**]
+
+&lt;img src="EDUC641_17_critiques_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Problems with probability
+
+In frequentist statistics, we assume that the null hypothesis has as good a chance as any other hypothesis at being true, and we then test how likely we are to observe the data as we see them when the null is actually true...**but is this the right framework???**
+
+How believable are the following findings?
+- People who wear glasses are more likely to be empathetic `\((p = 0.023)\)`
+- Medical doctors have fewer close relationships than those in other professions `\((p = 0.007)\)`
+- People who engage in [power posing](https://www.nytimes.com/2017/10/18/magazine/when-the-revolution-came-for-amy-cuddy.html) experience increased testosterone `\((p = 0.045)\)` (*a real paper*)
+
+
+--
+
+Perhaps it is wiser to start with a *prior* belief about the probability of an event?
+
+---
+# Bayesian statistics
+
+In contrast to frequentist approaches, Bayesian probability takes into account one's prior beliefs in determining the probability of an event
+- Key insight: adjust current beliefs based on previous knowledge/beliefs
+ + Adjust prior belief towards evidence in observed data
+- Prior beliefs could come from theory, research or personal belief
+
+#### Bayes Theorem (don't need to know this):
+
+$$
+\large P(A|B) = \frac{P(B|A)\cdot P(A)}{P(B)}
+$$
+--
+
+I found this to be a helpful explainer [video](https://www.youtube.com/watch?v=HaYbxQC61pw).
+
+---
+# Bayesian Example
+I have a theory that Oregonians are (generally) outdoors-y. I meet an outdoors-y person. What is the probability I have met an Oregonian?
+
+`\(P(Oregonian) = 0.02\)` (to make it simple 1 of 50 U.S. states) &lt;br&gt;
+`\(P(Outdoorsy | Oregonian) = 0.65\)` &lt;br&gt;
+`\(P(Outdoorsy) = 0.20\)`
+
+$$
+\large P(Oregonian | Outdoorsy) = \frac{(0.65)(0.02)}{0.20} = 0.065
+$$
+--
+
+Not surprisingly, I've updated my beliefs and now think there is a greater-than-base-rate likelihood (over 3x) that this person is an Oregonian. But it also tells me not to be too excited and claim the probability is 0.65 that I've met an Oregonian just because they are outdoors-y.
+
+--
+
+- Inferential statisticians (and applied researchers like yourselves) make statements like, "the chance we would observe differences between the treatment and control as large as the ones we did when there was actually no effect is less than 5%"
+- Bayesian statisticians (and applied researchers like yourselves) make statements like, "the chance that the treatment is more effective than the control is 92%"
+
+---
+# An applied example
+
+.pull-left[
+University instructors are appraised based (in part) on student evaluations. [Fraile &amp; Bausch-Morrell (2010)](https://link.springer.com/article/10.1007%2Fs10734-014-9823-0) collected data on these evaluations over two years.
+
+They use the sample estimates from the first year of data, to estimate instructor evaluation ratings in the second year -- *given their prior evaluation ratings*.
+
+The range of the Bayesian estimates for the Year 2 student evaluation ratings is narrower than the sample estimates (shrinks from score range of 2 - 6 to 2.5 - 5.5). The precision with which they make their estimates is much tighter. More to come on confidence intervals (or in Bayesian terms, credible intervals) in EDUC 643.
+]
+
+.pull-right[
+&lt;img src="freqBayes.jpg" width="1168" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# With our data
+
+
+
+
+```r
+bayes &lt;- stan_glm(life_expectancy ~ schooling, data = who,
+                  prior=normal(3, 1), prior_intercept = normal(54, 4))
+```
+
+```
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
+#&gt; Chain 1: 
+#&gt; Chain 1: Gradient evaluation took 0 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 1: Adjust your expectations accordingly!
+#&gt; Chain 1: 
+#&gt; Chain 1: 
+#&gt; Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 1: 
+#&gt; Chain 1:  Elapsed Time: 0.047 seconds (Warm-up)
+#&gt; Chain 1:                0.047 seconds (Sampling)
+#&gt; Chain 1:                0.094 seconds (Total)
+#&gt; Chain 1: 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
+#&gt; Chain 2: 
+#&gt; Chain 2: Gradient evaluation took 0 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 2: Adjust your expectations accordingly!
+#&gt; Chain 2: 
+#&gt; Chain 2: 
+#&gt; Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 2: 
+#&gt; Chain 2:  Elapsed Time: 0.028 seconds (Warm-up)
+#&gt; Chain 2:                0.051 seconds (Sampling)
+#&gt; Chain 2:                0.079 seconds (Total)
+#&gt; Chain 2: 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
+#&gt; Chain 3: 
+#&gt; Chain 3: Gradient evaluation took 0 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 3: Adjust your expectations accordingly!
+#&gt; Chain 3: 
+#&gt; Chain 3: 
+#&gt; Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 3: 
+#&gt; Chain 3:  Elapsed Time: 0.044 seconds (Warm-up)
+#&gt; Chain 3:                0.045 seconds (Sampling)
+#&gt; Chain 3:                0.089 seconds (Total)
+#&gt; Chain 3: 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
+#&gt; Chain 4: 
+#&gt; Chain 4: Gradient evaluation took 0 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 4: Adjust your expectations accordingly!
+#&gt; Chain 4: 
+#&gt; Chain 4: 
+#&gt; Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 4: 
+#&gt; Chain 4:  Elapsed Time: 0.04 seconds (Warm-up)
+#&gt; Chain 4:                0.051 seconds (Sampling)
+#&gt; Chain 4:                0.091 seconds (Total)
+#&gt; Chain 4:
+```
+---
+# With our data
+
+```r
+print(bayes)
+```
+
+```
+#&gt; stan_glm
+#&gt;  family:       gaussian [identity]
+#&gt;  formula:      life_expectancy ~ schooling
+#&gt;  observations: 173
+#&gt;  predictors:   2
+#&gt; ------
+#&gt;             Median MAD_SD
+#&gt; (Intercept) 42.5    1.6  
+#&gt; schooling    2.2    0.1  
+#&gt; 
+#&gt; Auxiliary parameter(s):
+#&gt;       Median MAD_SD
+#&gt; sigma 4.6    0.3   
+#&gt; 
+#&gt; ------
+#&gt; * For help interpreting the printed output see ?print.stanreg
+#&gt; * For info on the priors used see ?prior_summary.stanreg
+```
+---
+# Why not Bayes?
+
+.large[
+1. Selecting a prior can be **subjective**
+2. Difficulty in finding informative prior
+3. Disputes over value of uninformative priors
+4. Similarity in results across approaches
+5. Stasis
+]
+
+.large[.red[**Much more complexity to be explored in another course**]]
+
+---
+# A path forward...
+
+So where does all this leave us? Some recommendations for moving forward:
+1. Move beyond a single metric to evaluate practice and theory
+ - Multiple studies w/ focus on generalizability
+ - Replication studies
+ - Systematic reviews/meta-analysis
+ - Focus on *confidence intervals* and *magnitude* of effects (**more in EDUC 643**)
+
+2. Open Science
+ - Pre-registration (REES, OSF, etc.)
+ - Registered reports
+ - Public materials and data
+ - Use of scripts!!!
+ - Statistical tests (GRIM, SPRITE, etc.)
+
+3. Changes in academic incentives
+
+4. Recognition of the impact that subjective research decisions have on (some) quantitative empirical results
+
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+
+---
+# Goals of the unit
+
+- Articulate modern critiques of null-hypothesis significance testing framework
+- Describe strategies to improve replicability and generalizability of quantitative research
+
+---
+# To Dos
+
+### Final project 
+Due Dec. 7, 11:59pm
+
+### Re-submission
+Assignments &lt;13.5, resubmissions due on Canvas 12/2 at 5pm
+
+### End-of-term SES
+
+--
+
+# .red[**Thanks!**]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

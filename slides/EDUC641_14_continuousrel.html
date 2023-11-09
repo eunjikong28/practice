@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Examining the Relationship Between Continuous Variables</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="David D. Liebowitz" />
+    <script src="EDUC641_14_continuousrel_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="EDUC641_14_continuousrel_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="EDUC641_14_continuousrel_files/remark-css-0.0.1/uo.css" rel="stylesheet" />
+    <link href="EDUC641_14_continuousrel_files/remark-css-0.0.1/ki-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringanthemer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Examining the Relationship Between Continuous Variables
+## EDUC 641: Unit 4 Part 1
+### David D. Liebowitz
+
+---
+
+
+
+# Roadmap
+
+&lt;img src="Roadmap_4.png" width="90%" style="display: block; margin: auto;" /&gt;
+
+                                                       
+---
+# Goals of the unit
+
+- Describe relationships between quantitative data that are continuous
+- Visualize and substantively describe the relationship between two continuous variables
+
+.grey-light[
+- Describe and interpret a fitted bivariate regression line
+- Describe and interpret components of a fitted bivariate linear regression model
+- Visualize and substantively interpret residuals resulting from a bivariate regression model
+- Conduct a statistical inference test of the slope and intercept of a bivariate regression model
+- Write R scripts to conduct these analyses
+]
+
+---
+# Reminder of motivating question
+
+#### We learned a lot about the distribution of life expectancy in countries, now we are turning to thinking about relationships between life expectancy and other variables. In particular:
+
+.blue[**Do individuals living in countries with more total years of attendance in school experience, on average, higher life expectancy?**]
+
+--
+
+#### In other words, we are asking whether the variables *SCHOOLING* and *LIFE_EXPECTANCY* are related.
+
+---
+# Materials
+
+### 1. Life expectancy data (in file called life_expectancy.csv)
+### 2. Codebook describing the contents of said data
+### 3. R script to conduct the data analytic tasks of the unit (EDUC641_14_code.R)
+
+---
+class: middle, inverse
+# Bivariate relationships between continuous variables&lt;sup&gt;1&lt;/sup&gt;
+
+.footnote[[1] We can also look at relationships between continuous and categorical variables with increasingly sophisticated--but  functionally equivalent--methods, including two-sample t-tests, ANOVA, ANCOVA, regression, and more. We will examine these topics in EDUC 643.]
+---
+## Recall life expectancy distribution
+
+```
+#&gt; 
+#&gt;   The decimal point is at the |
+#&gt; 
+#&gt;   50 | 0
+#&gt;   52 | 000
+#&gt;   54 | 00
+#&gt;   56 | 00
+#&gt;   58 | 0000000
+#&gt;   60 | 000000
+#&gt;   62 | 00000000
+#&gt;   64 | 000000000
+#&gt;   66 | 00000000000000
+#&gt;   68 | 000000000000
+#&gt;   70 | 0000000
+#&gt;   72 | 00000000000
+#&gt;   74 | 00000000000000000000000000000
+#&gt;   76 | 000000000000000000000000
+#&gt;   78 | 0000000000
+#&gt;   80 | 0000000
+#&gt;   82 | 0000000000000000
+#&gt;   84 | 000
+#&gt;   86 | 0
+#&gt;   88 | 0
+```
+
+---
+# Another way
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# What about schooling?
+
+```
+#&gt; 
+#&gt;   The decimal point is at the |
+#&gt; 
+#&gt;    4 | 9
+#&gt;    5 | 04
+#&gt;    6 | 3
+#&gt;    7 | 1237
+#&gt;    8 | 144589
+#&gt;    9 | 00111225569
+#&gt;   10 | 00011233346777888889
+#&gt;   11 | 111223444677779
+#&gt;   12 | 0112355566667777788999
+#&gt;   13 | 000111122333334445566789999
+#&gt;   14 | 0012223334455667889
+#&gt;   15 | 0000122333334566899
+#&gt;   16 | 0001333345566
+#&gt;   17 | 0123377
+#&gt;   18 | 16
+#&gt;   19 | 022
+#&gt;   20 | 4
+```
+
+---
+# And differently again
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Numerical univariate statistics
+
+
+```r
+summary(who$life_expectancy)
+```
+
+```
+#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;   51.00   66.00   74.00   71.74   77.00   88.00
+```
+
+```r
+summary(who$schooling)
+```
+
+```
+#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;    4.90   10.80   13.10   12.93   15.00   20.40
+```
+
+&lt;br&gt;
+
+.blue[***Can you interpret the univariate statistics and displays on this and the previous slides? Describe to folks at your table information about the measures of central tendency and the distributional shape of these two variables***]
+
+---
+# Visualizing the relationship
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+Probably easier to see if we have some symbolic way of representing our data...
+
+
+
+---
+# Visualizing the relationship
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-8-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+.small[Horizontal axis (or *x*-axis) labels the value of the "predictor" *SCHOOLING*. Vertical axis (or *y*-axis) labels the value of the "outcome" *LIFE_EXPECTANCY*]
+
+.blue[*Can you interpret the bivariate display? What does it (and does it NOT) say about the relationship between schooling and life expectancy?*]
+
+---
+# Visualizing the relationship
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-9-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+.blue[*Can you interpret what this display says about the country of Chile?*]
+
+---
+# You try...
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-10-1.svg" style="display: block; margin: auto;" /&gt;
+
+.blue[*Can you interpret what this display says about the country of Egypt?*]
+
+---
+# What about the relationship?
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+
+.blue[*Is there a relationship between SCHOOLING and LIFE_EXPECTANCY? How do you know?*]
+
+--
+
+.blue[*What kind of line, curve or other construction best summarizes the observed relationship between SCHOOLING and LIFE_EXPECTANCY?*]
+
+---
+# What about the relationship?
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+
+.blue[*What kind of line, curve or other construction best summarizes the observed relationship between SCHOOLING and LIFE_EXPECTANCY?*]
+
+---
+# What about the relationship?
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+
+.blue[*What kind of line, curve or other construction best summarizes the observed relationship between SCHOOLING and LIFE_EXPECTANCY?*]
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Pin the tail on the point cloud
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-25-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# An aside about the origin
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-26-1.svg" style="display: block; margin: auto;" /&gt;
+
+*Figures that compare measures of central tendency across groups (e.g., bar charts) should generally start at zero (0) so as not to artificially inflate the differences between groups*
+
+---
+# An aside about the origin
+
+&lt;img src="EDUC641_14_continuousrel_files/figure-html/unnamed-chunk-27-1.svg" style="display: block; margin: auto;" /&gt;
+
+*Figures that describe relationships between two variables (e.g., scatter plots) might (or might not) include the origin (0, 0). The key concept these charts illustrate is the relationship. By adjusting the scale and range of each axis, we can make the relationship "look" different. But the strength and magnitude are the same.* More to come in EDUC 643...
+
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+
+---
+# Goals of the unit
+
+- Describe relationships between quantitative data that are continuous
+- Visualize and substantively describe the relationship between two continuous variables
+
+.grey-light[
+- Describe and interpret a fitted bivariate regression line
+- Describe and interpret components of a fitted bivariate linear regression model
+- Visualize and substantively interpret residuals resulting from a bivariate regression model
+- Conduct a statistical inference test of the slope and intercept of a bivariate regression model
+- Write R scripts to conduct these analyses
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

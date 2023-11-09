@@ -1,0 +1,124 @@
+---
+title: "Data Management Cheat Sheet"
+author: "David D. Liebowitz"
+date: "EDUC 641: Fall 2022"
+site: distill::distill_website
+output: 
+  html_document:
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Setting up project and directory structure
+
+Open your RStudio, create a project and save it. Go to the root directory of the project and create folders named: "Code", "Data", "Figures" and "Tables." Download the [life_expectancy.csv dataset](./data/life_expectancy.csv) and store it in the folder "Data". Create an R script (or .Rmd) file in the Code folder. 
+
+## Load relevant packages
+```{r, echo=T, results="hide"}
+# Call one package
+library(pacman)
+# Call multiple packages at once
+p_load(tidyverse, here, modelsummary)
+```
+
+## Read the data in
+```{r, echo=T}
+df <- read.csv(here("data/life_expectancy.csv"))
+# There are other packages to read in data that are much faster and more flexible
+```
+
+```{r, echo=F}
+df <- df %>%
+  janitor::clean_names() %>%
+  mutate(status = case_when(status == "Developed" ~ 1,
+                            status == "Developing" ~ 0))
+```
+
+## Extract cases
+```{r, echo=T}
+df <- filter(df, year == 2015)
+```
+
+## Extract variables
+```{r, echo=T}
+df <- df %>% select(country, status, schooling, life_expectancy)
+```
+
+## Rename variable
+```{r, echo=T}
+df <- rename(df, region = country)
+```
+
+## Create a new variable based on existing one(s)
+```{r, echo=T}
+# Replace existing variable
+df <- df %>%  
+      mutate(life_expectancy = round(life_expectancy, digits = 0))
+# Create a new one
+df <- df %>%
+      mutate(life2 = life_expectancy * life_expectancy)
+```
+
+## Inspect your data
+```{r, echo=T}
+head(df)
+str(df)
+```
+
+## Transform variables, as needed
+```{r, echo=T}
+df$status <- factor(df$status,
+                   levels = c(0, 1),
+                   labels = c("Developing", "Developed"))
+```
+
+
+## Examine missingness
+```{r, echo=T}
+# One at a time
+sum(is.na(df$schooling))
+
+# All at once
+sapply(df, function(x) sum(is.na(x)))
+```
+
+## Decide on listwise/pairwise deletion
+```{r, echo=T}
+# In this case, we'll use listwise
+df <- filter(df, !is.na(schooling))
+```
+
+## Calculate summary statistics
+```{r, echo=T}
+mean(df$life_expectancy)
+median(df$life_expectancy)
+sd(df$life_expectancy)
+summary(df$life_expectancy)
+table(df$status, exclude=NULL)
+```
+
+## Visualize variables (categorical)
+```{r, echo=T}
+counts <- table(df$status)
+barplot(counts)
+```
+
+## Visualize variables (continuous)
+```{r, echo=T}
+hist(df$life_expectancy)
+plot(density(df$schooling))
+```
+
+## Create descriptive table (continuous)
+```{r, echo=T}
+datasummary_skim(df)
+```
+
+## Create descriptive table (categorical)
+```{r, echo=T}
+datasummary_skim(df, type="categorical")
+```

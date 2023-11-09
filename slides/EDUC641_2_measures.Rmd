@@ -1,0 +1,364 @@
+---
+title: "Quantitative Measures"
+subtitle: "EDUC 641: Class 2"
+author: "David D. Liebowitz"
+#date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'uo', 'ki-fonts', 'my_custom.css', 'xaringanthemer.css']
+    # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+
+---
+
+```{R, setup, include = F}
+library(pacman)
+p_load(here, tidyverse, ggplot2, xaringan, knitr, kableExtra, xaringanthemer)
+
+i_am("slides/EDUC641_2_measures.rmd")
+
+
+red_pink <- "#e64173"
+turquoise = "#20B2AA"
+orange = "#FFA500"
+red = "#fb6107"
+blue = "#3b3b9a"
+green = "#8bb174"
+grey_light = "grey70"
+grey_mid = "grey50"
+grey_dark = "grey20"
+purple = "#6A5ACD"
+slate = "#314f4f"
+
+extra_css <- list(
+  ".red"   = list(color = "red"),
+  ".blue"  = list(color = "blue"),
+  ".red-pink" = list(color= "red_pink"),
+  ".grey-light" = list(color= "grey_light"),
+  ".purple" = list(color = "purple"),
+  ".small" = list("font-size" = "90%"),
+  ".tiny" = list("font-size" = "70%"),
+  ".tiny2" = list("font-size" = "50%"))
+
+write_extra_css(css = extra_css, outfile = "my_custom.css")
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 6.75,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+options(knitr.table.format = "html")
+
+```
+
+# Roadmap
+
+```{r, out.width = "90%", echo=F}
+  include_graphics("roadmap.png")
+```
+                        
+---
+# Class goals
+1. Describe types of and differences in measurement scales and why this matters
+
+
+---
+# Types of data
+
+```{r, out.width = "80%", echo=F}
+  include_graphics("roadmap.png")
+```
+
+**How we collect and quantify the data informs the kind of analysis we will conduct.**
+
+---
+# Core concepts in measurement
+
+**What is measurement?** assigning categories or numbers based on a set of rules
+
+--
+
+.blue[This concept is **critical** to quantitative research: we have some idea of a "thing" we want to examine (sometimes called a construct), and we need to figure how to turn the observed thing into a category or number.]
+
+--
+
+1. A theoretical .blue[**construct**]: the "thing" you're trying to understand
+
+2. A .blue[**measure**]: the tool used to observe 
+
+3. An .blue[**operationalization**]: the connection between the measure and the construct
+
+4. A .blue[**variable**]: the thing that ends up in your data set
+
+---
+# Levels/scales of measurement
+
+**Levels of measurement**: how categories/numbers are defined
+
+Each type of measurement has a set of properties which determines the appropriate analysis.
+
+--
+### Four levels/scales of measurement
+
+1. Nominal
+2. Ordinal
+3. Interval
+4. Ratio
+
+---
+# Nominal scale
+
+#### No hierarchy among levels of a variable
+#### Levels are unordered, representing labels
+#### A variable defining whether someone is an omnivore, vegetarian, vegan or fruititarian is on a nominal sclae
+
+#### Most demographic variables are nominal:
+- Hair color
+- Race
+- Ethnicity
+- Gender
+
+---
+# Ordinal scale
+
+#### Levels are logically ordered; a higher level indicates "more"
+#### Distances between levels are not necessarily equal
+#### Level 1 < Level 2 < Level 3 < ... (monotonicity)
+
+#### Examples:
+- Grades (A - F letter grades)
+- Competition (1st place, 2nd place, 3rd place)
+- Likert scale (on a scale of 1 to 10 with 1 being *very unhappy* and ten being *very happy*, how happy are you today?)
+
+---
+# Interval scale
+
+#### Represents *quantity* and has *equal units*
+#### Ordinal scale + equal measurement units
+#### **There is no absolute zero**
+#### Can be negative
+
+#### Examples:
+- The Fahrenheit temperature scale
+ + The difference between 20 F and 30 F is the same as the difference between 60 F and 70 F
+ + 0 does not represent "no temperature"
+ + There is no concept of dividing or multiplying values on the scale. There are no ratios. We can't describe 50 F as half as hot as 100 F or twice as hot as 25 F
+
+---
+# Ratio scale
+
+#### Interval scale + True zero point
+#### True zero means a point where the thing being measured does not exist
+
+Examples:
+- Height
+- Mass
+- Distance
+- Length of a piece of wood
+- Test score (?)
+
+---
+# Levels of measurement
+
+|            | Indicates difference | Indicates direction of difference | Indicates amount of difference | Has absolute zero
+|---------------------------------------------------------------------------------------------------------------------------
+| ?????????  | X |   |   | 
+| ?????????  | X | X |   | 
+| ?????????  | X | X | X | 
+| ?????????  | X | X | X | X
+
+.blue[**Can you match the four measurement scales to their characteristics in the above table?**] *Try not to peek ahead to the next slide?*
+
+---
+# Levels of measurement
+
+|          | Indicates difference | Indicates direction of difference | Indicates amount of difference | Has absolute zero
+|---------------------------------------------------------------------------------------------------------------------------
+| Nominal  | X |   |   | 
+| Ordinal  | X | X |   | 
+| Interval | X | X | X | 
+| Ratio    | X | X | X | X
+
+
+---
+# Alternative measure terms
+
+Categorical variable
+- Nominal and ordinal measures
+- Use labels to describe
+
+--
+
+Continuous variable
+- Always possible to have another value in between two other values
+- Interval and ratio measures
+- Data with arithmetic properties
+
+--
+
+Discrete variable
+- Not possible to have another value in between two other values, .red[**on that scale**]
+- Nominal and ordinal measures always discrete
+- Ratio/interval may or may not be (contrast "degrees Celsius" with "years")
+
+---
+# Four levels/scales of measurement
+
+1. Nominal
+2. Ordinal
+3. Interval
+4. Ratio
+
+.red[**Why does this matter?**] 
+
+--
+Different scales contain different information and have different mathematical properties. 
+
+--
+
+Is someone who says they are at 8 on a happiness scale twice as happy as someone who says they are at a 4?
+
+Is there a mean (or standard deviation) for the hair color of the students in this class?
+
+
+---
+# More complexity
+
+- Quasi-interval scales
+- Non-negative interval scales
+- Quasi-ordinal scales
+
+--
+
+... the point is that sometimes researchers treat measures as having certain kinds of mathematical properties that they may or may not have, which has implications to the conclusions that they make
+
+---
+# An example
+
+.pull-left[
+- Study in prominent journal (w. authors from U Chicago, U Toronto, U Cape Town) found that in more religious countries, children were less altruistic
+- Intended to compare within-country differences, so want to "adjust" for country-level "religiosity"
+- Included "country" as a ratio-scale variable: US = 1, Canada = 2, S. Africa = 3, etc.
+ + $\rightarrow$ Canada has twice as much "country-ness" as US
+ + Clearly, it should be a nominal variable and treated as such
+- Direction of results flips when measure is appropriately operationalized
+]
+
+.pull-right[
+```{r, echo=F}
+include_graphics("retract.jpg")
+```
+]
+
+---
+# The measure of our class
+```{r, echo=F}
+  include_graphics("measure1.JPG")
+```
+
+---
+# The measure of our class
+```{r, echo=F}
+  include_graphics("measure2.JPG")
+```
+
+---
+# The measure of our class
+```{r, echo=F}
+  include_graphics("measure3.JPG")
+```
+
+---
+# The measure of our class
+```{r, echo=F}
+  include_graphics("measure4.JPG")
+```
+
+---
+# The measure of our class
+```{r, echo=F}
+  include_graphics("measure5.JPG")
+```
+
+---
+# The measure of our class
+```{r, echo=F}
+  include_graphics("measure6.JPG")
+```
+
+---
+# The measure of our class
+
+Qualtrics: https://oregon.qualtrics.com/jfe/form/SV_0MSB8ExhepNtVdA
+
+or
+
+```{r, echo=F}
+include_graphics("survey_qr.jpg")
+```
+
+---
+class: middle, inverse
+
+# Live coding!
+
+### Ahhh! Don't try this at home!
+
+--
+<br>
+### Purpose:
+- Get to know a little about class
+- Model joy/excitement in exploring data
+- Observe process and power of data exploration
+- Set you up to do some of this yourselves
+
+---
+# Measure reliability & validity
+
+```{r, echo=F}
+include_graphics("lo_rely.jpg")
+```
+
+--
+.blue[**What kind of validity are we referencing here?**]
+
+---
+# Measure reliability & validity
+
+```{r, echo=F}
+include_graphics("hi_rely.jpg")
+```
+
+--
+More on this in EDUC 645, and much more on this in EDLD 663 (*Measurement & Assessment*) and EDLD 661/2 (*Item Response Theory*)!
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+
+---
+# Class goals
+
+1. Describe types of and differences in measurement scales
+
+---
+# To-Dos
+
+### Quiz on Unit 0 next class
+
+### Optional follow-up:
+- Complete Module 4 in R Bootcamp (data types)
+- Complete Module 5 in R Bootcamp (vectors)
+

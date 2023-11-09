@@ -1,0 +1,67 @@
+---
+title: "EDUC 641 Assignment 1"
+subtitle: "(Categorical Data Structure and Descriptives)"
+output: html_document
+---
+
+### General Guidelines
+
+The purpose of this assignment is to practice the concepts and vocabulary we have been modeling in class and implement some of the techniques we have learned. You may work on your own or collaborate with one partner. Please make sure that you engage in a a full, fair and mutually-agreeable collaboration if you do choose to collaborate. If you do collaborate, you should plan, execute and write-up your analyses together, not simply divide the work. Please make sure to indicate clearly when your work is joint and any other individual or resource (outside of class material) you consulted in your responses.
+
+
+### Submission Requirements
+
+Please upload below two files on Canvas:  
+
+1. An .html, .doc(x) or .pdf file that includes your typed responses (in your own words and not identical to anybody else's except your partner), tables, and/or figures to the problems
+2. The .Rmd or .R file that you used to render the tables and figures in the above html/pdf. 
+
+*If you have prior experience, you may choose to compose your answers in RMarkdown and render to a Word doc or pdf. If so, you can simply set up echo = TRUE and include = TRUE in your .Rmd file to allow both code and answers to display in a single output file. If you have no idea what the preceding sentence meant, ignore it.* 
+   
+### Objectives of this assignment
+
+- Describe and summarize categorical data
+- Create visualizations of categorical data
+
+### Data Background
+
+The dataset we'll be using in this assignment is drawn from the NCRECE [Teacher Professional Development Study (PDS)](https://www.icpsr.umich.edu/web/ICPSR/studies/34848) data. This professional development study was a randomized controlled evaluation of two forms of professional development (PD) - coursework (phase 1) and consultancy (phase 2) - delivered to about 490 early childhood education teachers across the nation. These PD supports aimed to improve teachers' implementation of language/literacy activities and interactions with children, as well as promote gains in children's social and academic development. 
+
+While the primary goals of the PD intervention were to improve language and literacy skills, researchers theorized that if teachers became more effective at teaching literacy, they might also improve the quality of their relationships with their students and families. In turn, these improved relationships might lead to other positive effects of the PD intervention. One pair of researchers ([Hanno and Gonzalez, 2020](https://doi.org/10.1080/19345747.2019.1634170)) wanted to learn whether the PD intervention improved student attendance. 
+
+The paired assignments 1 and 2 will ask you to answer two **research questions**: 
+
+1. Did teacher participation in a consultancy-based professional development decrease rates of student chronic absenteeism? 
+2. Did the effects of teacher-participation in a consultancy-based professional development differ by students' gender identities?
+
+**Sample**. Our dataset is student-level data for 942 preschool students, which is the same sample used in the original Hanno and Gonzalez (2020) paper. The authors test several approaches to compute the outcome variable: chronic absenteeism. For simplifying reasons, the approach we use in our sample is one from one of their the robustness checks rather the one used in the main results of their paper.
+
+**Key variables**. The outcome measure in our data is whether a student is "chronically absent" from school. In many jurisdictions, students are labelled "chronically absent" if they miss 10 percent or more of the school year. Given the typical 180-day school, students are, therefore, defined as chronically absent if they miss 18 or more days in a year. 
+
+Details on all variables are as follows:
+
+ * *childid*, the student's unique identification number.
+ * *treat*, treatment condition measure, which is coded 1 if the student's teacher was in the consultancy treatment group, coded 0 if the student's teacher was in the control group.  
+ * *absenteeism*, measure of chronic absenteeism, coded 1 if the student missed 10 percent or more school days and 0 if not. 
+ * *cgender*, the student's gender, coded 1 for female and 0 for male.
+
+### Assignment Details
+
+#### 1. Read in the dataset
+
+Open your RStudio, create a project and save it. Go to the root directory of the project and create folders named: "Code", "Data", "Figures" and "Tables." Download the [cat.csv dataset](../data/cat.csv) and store it in the folder "Data". Create an R script (or .Rmd) file in the Code folder. Read the data into your R environment. You do not need to include this response in your memo; only in your code. **(1 point)**
+
+#### 2. Understand the structure of the data
+
+2.1. Write your own code to view the dataset and write 3-4 sentences about the structure of the data (how many variables are there, what is the current type of each variable and what the type should be, how many rows/observations, etc.). **(3 points)**
+
+
+2.2. Write your own code to transform the variables, *treat*, *absenteeism*, and *cgender* into factor variables and label them consistently with the data background information above. You do not need to include this response in your memo; only in your code. **(1 point)**
+
+#### 3. Describe and summarize the two key variables
+
+3.1. Write one sentence that states how many students were in the treatment and control groups. Provide your response and create a table AND a figure to demonstrate your answer. *Make sure to label all parts of your figure!* **(5 points)**
+
+3.2. Write one sentence that states what *proportion* of students were chronically absent? Provide your response and create a table AND a figure to demonstrate your answer. Write one sentence indicating whether this seems like a large or small proportion to you. *Make sure to label all parts of your figure!* **(5 points)**
+
+

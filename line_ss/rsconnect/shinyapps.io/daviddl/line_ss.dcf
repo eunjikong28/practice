@@ -1,0 +1,13 @@
+name: line_ss
+title: line_ss
+username:
+account: daviddl
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4723053
+bundleId: 5066581
+url: https://daviddl.shinyapps.io/line_ss/
+when: 1632456913.68637
+lastSyncTime: 1632456913.68738
+asMultiple: FALSE
+asStatic: FALSE

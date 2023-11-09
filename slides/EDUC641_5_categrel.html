@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Examining the relationship between categorical variables</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="David D. Liebowitz" />
+    <script src="EDUC641_5_categrel_files/header-attrs-2.14.3/header-attrs.js"></script>
+    <link href="EDUC641_5_categrel_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="EDUC641_5_categrel_files/remark-css-0.0.1/uo.css" rel="stylesheet" />
+    <link href="EDUC641_5_categrel_files/remark-css-0.0.1/ki-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my_custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringanthemer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Examining the relationship between categorical variables
+]
+.subtitle[
+## EDUC 641: Unit 2
+]
+.author[
+### David D. Liebowitz
+]
+
+---
+
+
+
+# Roadmap
+
+&lt;img src="Roadmap_2.png" width="90%" style="display: block; margin: auto;" /&gt;
+                                                          
+---
+# Goals of the unit
+
+- Describe relationships between quantitative data that are categorical
+- Calculate an index of the strength of the relationship between two categorical variables, the chi-squared ( `\(\chi^2\)`) statistic
+- Write R scripts to conduct these analyses
+- Formulate and describe the purpose of a null hypothesis
+- Conceptually describe the criteria to make a statistical inference from a sample to a population
+- Interpret and report the results of a contingency-table analysis and a statistical inference from a chi-squared statistic
+
+---
+# Reminder of motivating question
+
+
+.blue[**Were convicted murderers more likely to be sentenced to death in Georgia if they killed someone Black or if they killed someone white?**]
+
+---
+class: middle, inverse
+# Relationships between variables
+
+---
+# Two-way tables
+
+.small[Now we seek to create a *joint display* of the values of *RVICTIM* and *DEATHPEN*]
+
+
+
+```r
+table(df$deathpen, df$rvictim)
+```
+
+```
+#&gt;      
+#&gt;       Black White
+#&gt;   No   1483   863
+#&gt;   Yes    23   106
+```
+
+--
+.small[Could do this other ways...]
+
+```r
+xtabs(formula = ~ deathpen + rvictim, data = df)
+```
+
+```
+#&gt;         rvictim
+#&gt; deathpen Black White
+#&gt;      No   1483   863
+#&gt;      Yes    23   106
+```
+
+---
+# Two-way tables
+
+#### Can ask R for this too:
+
+```r
+round(prop.table(table(df$deathpen, df$rvictim), margin=2)*100, 2)
+```
+
+```
+#&gt;      
+#&gt;       Black White
+#&gt;   No  98.47 89.06
+#&gt;   Yes  1.53 10.94
+```
+
+--
+### Putting it into words
+
+&gt; In our sample of convicted murderers in Georgia, when a **Black person** was a victim...
+
+--
+
+&gt; In our sample of convicted murderers in Georgia, when a **white person** was a victim...
+
+---
+# Grouped charts
+
+
+```r
+group &lt;- ggplot(df, aes(x = rvictim, fill = deathpen)) +
+                geom_bar(position = "dodge") + 
+                xlab("Race of victim")
+```
+
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Observed vs. Expected
+
+.pull-left[
+####Frequencies that we OBSERVE
+
+```
+#&gt;      
+#&gt;       Black White  Sum
+#&gt;   No   1483   863 2346
+#&gt;   Yes    23   106  129
+#&gt;   Sum  1506   969 2475
+```
+]
+
+.pull-right[
+####Frequencies that we would EXPECT if there were NO relationship 
+
+|deathpen   | Black | White | Sum   | Proport.
+|------------------------------------------------
+|No         |       |       | 2346  | 0.948
+|Yes        |       |       | 129   | 0.052
+|Sum        | 1506  |  969  | 2475  | 1.000
+|Proportion | 0.608 | 0.392 | 1.000 |
+]
+
+--
+
+&lt;br&gt;
+
+*Note*: The proportions above are rounded, so if you use them to calculate the **EXPECTED** values, they will differ slightly from those on the next slide. If you calculate the proportions by hand (i.e., `\(1506/2474 = 0.60\overline{84}\)`), you will get the exact values, and then they will align with the rounded **EXPECTED** values on the next slide.
+
+---
+# Observed vs. Expected
+
+.pull-left[
+####Frequencies that we OBSERVE
+
+```
+#&gt;      
+#&gt;       Black White  Sum
+#&gt;   No   1483   863 2346
+#&gt;   Yes    23   106  129
+#&gt;   Sum  1506   969 2475
+```
+]
+
+.pull-right[
+####Frequencies that we would EXPECT if there were NO relationship 
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; deathpen &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Black &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; White &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; No &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1428 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 918 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2346 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Yes &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 129 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sum &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 969 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2475 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+&lt;br&gt;
+&gt; What do you think? Is there a relationship between *DEATHPEN* and *RVICTIM*?
+
+---
+# A desired index...?
+
+.pull-left[
+####Frequencies that we OBSERVE
+
+```
+#&gt;      
+#&gt;       Black White  Sum
+#&gt;   No   1483   863 2346
+#&gt;   Yes    23   106  129
+#&gt;   Sum  1506   969 2475
+```
+]
+.pull-right[
+####Frequencies that we would EXPECT if there were NO relationship 
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; deathpen &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Black &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; White &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; No &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1428 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 918 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2346 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Yes &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 129 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sum &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 969 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2475 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+&lt;br&gt;
+#### It would be nice to have an index of the **NET DISCREPANCY** between the **OBSERVED** and **EXPECTED** frequencies in the sample
+
+---
+# The Chi-Squared `\(\chi^2\)` statistic
+
+For a moment, assume that there is a powerful statistic that allows us to summarize the **NET DISCREPANCY** between the tables of **OBSERVED** and **EXPECTED** frequencies. Let's call this statistic the Pearson Chi-Squared `\((\chi^2)\)` statistic
+
+.pull-left[
+####Frequencies that we OBSERVE
+
+```
+#&gt;      
+#&gt;       Black White  Sum
+#&gt;   No   1483   863 2346
+#&gt;   Yes    23   106  129
+#&gt;   Sum  1506   969 2475
+```
+]
+.pull-right[
+####Frequencies that we would EXPECT if NO relationship 
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; deathpen &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Black &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; White &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; No &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1428 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 918 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2346 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Yes &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 129 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sum &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 969 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2475 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+--
+
+&lt;br&gt;
+$$ \chi^2 = \frac{(1483-1428)^2}{1428} + \frac{(863-918)^2}{918} + \frac{(23-78)^2}{78} + \frac{(106-51)^2}{51} $$
+$$ \chi^2 = 103.8 $$
+--
+
+Yay! We got an answer, but what does it mean...?
+
+---
+class: middle, inverse
+# Hypothesis testing and statistical inference
+
+---
+# Big or small?
+
+We can summarize the **NET DISCREPANCY** between the tables of **OBSERVED** and **EXPECTED** frequencies, using a statistic called the Pearson Chi-Squared ( `\(\chi^2\)`) statistic
+
+.pull-left[
+####Frequencies that we OBSERVE
+
+```
+#&gt;      
+#&gt;       Black White  Sum
+#&gt;   No   1483   863 2346
+#&gt;   Yes    23   106  129
+#&gt;   Sum  1506   969 2475
+```
+]
+.pull-right[
+####Frequencies that we would EXPECT if NO relationship 
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; deathpen &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Black &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; White &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Sum &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; No &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1428 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 918 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2346 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Yes &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 78 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 129 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sum &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 969 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2475 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+&lt;br&gt;
+
+$$ \chi^2 = 103.8 $$
+--
+
+Decision rule: If `\(\chi^2\)` is big, then declare that there is a relationship between *DEATHPEN* and *RVICTIM*; if `\(\chi^2\)` is zero (or close), then declare there is no relationship between *DEATHPEN* and *RVICTIM*...
+
+--
+but what is **BIG**, what is **close to zero**, and is 103.8 **big** or **close to zero**?
+
+--
+
+For that we will use the this statistic to conduct a `\(\color{red}{\chi^2}\)` .red[**goodness-of-fit**] test.
+
+---
+# Statistical inference
+
+Let's take a step back to capture the nature of the problem
+- We've looked at some data on some convicted murderers in the state of Georgia
+- We're not interested in only *these* murderers, but we're interested in a broader *population* of murderers from which our *sample* was drawn
+  + In fact, even if we could observe outcomes for all murderers in the state of Georgia, our observation of them is imperfect due to *measurement error* and so we only ever observe samples, never populations (more on this later)
+- Is there something about sampling from a population that could resolve our problem?
+- Is there some way to generalize our conclusions about our *sample* relationship between *DEATHPEN* and *RVICTIM* to the *underlying population*?
+  + This is called *statistical inference* and it is *the* critical contribution of quantitative methods to research
+
+---
+# Sampling idiosyncrasy
+
+#### When you generalize from a sample back to its underlying population, you must be careful that your empirical study has not been the victim of *sampling idiosyncrasy*
+
+#### Is the following scenario plausible?
+- There really is no relationship between *DEATHPEN* and *RVICTIM* **in the population**
+- By accident, we have drawn an idiosyncratic sample from the population
+- This sampling idiosyncrasy ended up giving us a `\(\chi^2\)` statistic as large as 103.8 by pure accident
+
+#### How can we assess the plausibility of this scenario? 
+
+---
+# The Null Hypothesis `\((H_{0})\)`
+
+We start by imagining a hypothetical world in which there is **no relationship** between *DEATHPEN* and *RVICTIM* in a true population of convicted murderers. Then, we imagine drawing a series of samples of convicted murders over and over again (say...10,000 times) from this hypothetical population. What values of the `\(\chi^2\)` statistic might we observe?
+
+&lt;img src="null_pop.jpg" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Testing the null
+
+In this hypothetical example of repeated sampling from a null population, we could record all 10,000 values of the `\(\chi^2\)` statistic
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+
+The histogram summarizes the natural variation that could occur in a `\(\chi^2\)` statistic as a result of *random sampling idiosyncrasy*, after drawing repeated samples from a hypothetical population in which there is no relationship between *DEATHPEN* and *RVICTIM*.
+
+---
+# Testing the null
+
+In this hypothetical example of repeated sampling from a null population, we could record all 10,000 values of the `\(\chi^2\)` statistic
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+
+.blue[*If this were the histogram that could result from sampling idiosyncrasy, and this were the value of the chi-square statistic, what would you think?*]
+
+---
+# Testing the null
+
+In fact, this is the value of the `\(\chi^2\)` statistic we observed:
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-20-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+.blue[*This is a histogram of possible chi-square values that could result from sampling idiosyncrasy, and then the actual value of the chi-squared statistic in our sample. What do you think?*]
+
+--
+
+*WOOHOO!* In this thought exercise, you've just engaged in a rudimentary version of .red[*Null-Hypothesis Significance Testing (NHST)*]; the bedrock of most social science research.
+
+---
+# Testing the null (*p*-values)
+
+In fact, we don't need to examine the full histogram. Instead, we can say that in a hypothetical exercise of sampling repeatedly from a null population, less than 1 in a 1,000,000,000,000,000 (trillion) of all accidental values of the `\(\chi^2\)` statistic are larger than a value of 103.8
+
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-21-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+The statistic that captures the probability of observing a `\(\chi^2\)` statistic of a given magnitude in a particular sample, in the presence of a null population, is called the .red[*p*-value]
+
+
+---
+# Testing the null (*p*-values)
+
+.blue[*At what p-value would you start to believe that the value of the*] `\(\color{blue}{\chi^2}\)` .blue[*statistic in your own research was "big" (i.e., was unlikely to have occurred by accident)*]
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-22-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Testing the null (*p*-values)
+
+.blue[*At what p-value would you start to believe that the value of the*] `\(\color{blue}{\chi^2}\)` .blue[*statistic in your own research was "big" (i.e., was unlikely to have occurred by accident)*]
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-23-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+.small[In social science research, it is customary to (arbitrarily) set that threshold at **5 percent (*p*&lt;0.05)**. In other words, we say that if the difference between our observed data and our expected data would have happened in fewer than 1 out of 20 randomly drawn samples, that the difference reflects a true difference in the population.]
+
+---
+# Testing the null (*p*-values)
+
+.blue[*In social science research, it is customary to (arbitrarily) set an alpha-threshold and conduct a Null-Hypothesis Significance Test*]
+&lt;img src="EDUC641_5_categrel_files/figure-html/unnamed-chunk-24-1.svg" style="display: block; margin: auto;" /&gt;
+
+--
+
+.blue[**Is this the right thing to do? At the end of the course, we will revisit this concept.**]
+
+---
+class: middle, inverse
+# Incorporating a third variable
+
+---
+# Sub-sample comparisons
+
+There are more complex ways of doing this, but one approach is to replicate the original contingency table analysis in interesting "slices" of the sample, defined by a third variable
+
+--
+
+&lt;img src="sub_sample.jpg" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+# Cases with Black murderers
+
+
+```r
+df_b &lt;- filter(df, rdefend == "Black")
+table(df_b$deathpen, df_b$rvictim)
+```
+
+```
+#&gt;      
+#&gt;       Black White
+#&gt;   No   1304    63
+#&gt;   Yes    18    50
+```
+
+.pull-left[
+#### Black murderers, Black victims
+When a Black victim is killed by a Black murderer,
+$$ \frac{18}{18+1304} = 1.36 \% $$
+of the murderers are sentenced to death.
+]
+
+.pull-right[
+#### Black murderers, White victims
+When a White victim is killed by a Black murderer,
+$$ \frac{50}{50+63} = 44.25 \% $$
+of the murderers are sentenced to death.
+]
+
+--
+
+The percentage of Black murderers sentenced to death for killing a White victim is about 32.5 times the percentage of Black murderers sentenced to death for killing a Black victim, in Georgia
+
+---
+# A statistical test
+
+.pull-left[
+
+Observed:
+
+```
+#&gt;              df_b$rvictim
+#&gt; df_b$deathpen Black White
+#&gt;           No   1304    63
+#&gt;           Yes    18    50
+```
+Expected:
+
+```
+#&gt;              df_b$rvictim
+#&gt; df_b$deathpen Black White
+#&gt;           No   1259   108
+#&gt;           Yes    63     5
+```
+`\(\chi^2\)` statistic:
+
+```
+#&gt; X-squared 
+#&gt;  414.7031
+```
+*p*-value
+
+```
+#&gt; [1] 3.470593e-92
+```
+]
+
+--
+
+.pull-right[
+- `\(H_{0}\)`: *DEATHPEN* and *RVICTIM* are unrelated in the population of convicted Black murderers in GA
+- `\(\chi^2\)` statistic: 414.7
+- *p*-value: &lt;0.0001
+- Decision: Reject `\(H_{0}\)`
+- Conclusion: There is a statistically significant relation between the assignment of the death penalty and the race of the victim, on average, in the population of Black murderers in GA.
+]
+
+---
+# Cases with White murderers
+
+
+```
+#&gt;      
+#&gt;       Black White
+#&gt;   No    179   800
+#&gt;   Yes     5    56
+```
+
+.pull-left[
+#### White murderers, Black victims
+When a Black victim is killed by a White murderer,
+$$ \frac{5}{5+179} = 2.71 \% $$
+of the murderers are sentenced to death.
+]
+
+.pull-right[
+#### White murderers, White victims
+When a White victim is killed by a White murderer,
+$$ \frac{56}{56+800} = 6.89 \% $$
+of the murderers are sentenced to death.
+]
+
+--
+
+The percentage of White murderers sentenced to death for killing a White victim is about 2.5 times the percentage of White murderers sentenced to death for killing a Black victim, in Georgia
+
+---
+# A statistical test
+
+.pull-left[
+
+Observed:
+
+```
+#&gt;              df_w$rvictim
+#&gt; df_w$deathpen Black White
+#&gt;           No    179   800
+#&gt;           Yes     5    56
+```
+Expected:
+
+```
+#&gt;              df_w$rvictim
+#&gt; df_w$deathpen Black White
+#&gt;           No    173   806
+#&gt;           Yes    11    50
+```
+`\(\chi^2\)` statistic:
+
+```
+#&gt; X-squared 
+#&gt;  3.349547
+```
+*p*-value
+
+```
+#&gt; [1] 0.06722351
+```
+]
+
+--
+
+.pull-right[
+- `\(H_{0}\)`: *DEATHPEN* and *RVICTIM* are unrelated in the population of convicted White murderers in GA
+- `\(\chi^2\)` statistic: 3.35
+- *p*-value: 0.067
+- Decision: Fail to reject `\(H_{0}\)`
+- Conclusion: There is not a statistically significant relation between the assignment of the death penalty and the race of the victim, on average, in the population of White murderers in GA.
+
+
+
+- Note that we **NEVER** accept the null-hypothesis. We only ever *fail to reject* it.
+]
+
+---
+# Putting it all together
+
+### Basic steps of classical statistical inference
+1. State a research question, including a null hypothesis `\((H_{0})\)` which states there exists no relationship between our variables of interest
+2. Display and describe the observed data
+3. Summarize the observed data in relationship to an expected value
+4. Set a threshold at which we will no longer believe that the discrepancy between the observed and expected relationship is due to sampling idiosyncrasy
+5. Estimate the *p*-value
+6. Reject or fail to reject the null hypothesis
+7. Interpret your findings drawing explicitly on plots, summary statistics and test statistics
+
+---
+# Our intepretation
+
+&gt; In the population of convicted murderers in Georgia, the imposition of the death penalty and the race of the victim are related ( `\(\chi^2\)` = 103.8, *p*&lt; 0.001) The percentage of convicted murderers who were sentenced to death after killing a White victim was more than 8 times the percentage of convicted to murderers who were sentenced to death after killing a Black victim. In Figure 1, we show... 
+
+&gt; This phenomenon is largely driven by the imposition of the death penalty on Black defendants. Courts sentenced Black defendants to death for killing White victims at more than 32 times the frequency than when they were convicted of killing Black defendants ( `\(\chi^2\)` = 414.7, *p*&lt;0.001); whereas, we detect no statistical difference between White defendants convicted of murdering White compared to Black victims ( `\(\chi^2\)` = 3.3, *p*=0.067). In Table 1, we show...
+
+---
+
+# Estimating the `\(\chi^2\)` statistic in R
+
+
+```r
+chi_df &lt;- chisq.test(df$deathpen, df$rvictim)
+chi_df
+```
+
+```
+#&gt; 
+#&gt; 	Pearson's Chi-squared test with Yates' continuity correction
+#&gt; 
+#&gt; data:  df$deathpen and df$rvictim
+#&gt; X-squared = 103.82, df = 1, p-value &lt; 2.2e-16
+```
+
+```r
+chi_df$expected
+```
+
+```
+#&gt;            df$rvictim
+#&gt; df$deathpen      Black     White
+#&gt;         No  1427.50545 918.49455
+#&gt;         Yes   78.49455  50.50545
+```
+
+```r
+round(chi_df$p.value, 5)
+```
+
+```
+#&gt; [1] 0
+```
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+---
+# Goals of the unit
+
+- Describe relationships between quantitative data that are categorical
+- Calculate an index of the strength of the relationship between two categorical variables, the chi-squared ( `\(\chi^2\)`) statistic
+- Write R scripts to conduct these analyses
+- Formulate and describe the purpose of a null hypothesis
+- Conceptually describe the criteria to make a statistical inference from a sample to a population
+- Interpret and report the results of a contingency-table analysis and a statistical inference from a chi-squared statistic
+
+---
+# To-Dos
+
+### Reading
+- LSWR Chapter 11: hypothesis testing
+- LSWR Chapter 12: categorical data analysis (chi-square test focus)
+    + Please do not worry about fully understanding the discussions on sampling distributions, degrees of freedom, one- vs. two-sided tests, or variations of chi-squared calculations **(Sections 11.3, 11.4.3, 11.7, 11.8, 12.1.4-12.1.8, 12.3-12.9)**. We will (partially) cover these topics in future classes.
+- Levy (2019)
+    + Last name A-H: Clayton; Last Name I-P: Evans; Last Name R-Z: Levy
+    + Prep to summarize main ideas and supporting details
+
+### Optional follow-up
+- Complete R Bootcamp Module 6 (matrices)
+- Complete R Bootcamp Module 7 (lists)
+
+### Assignments
+- Quiz on Units 1 &amp; 2 next class (10/13)
+- Assignment #2 Due October 19, 11:59pm
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

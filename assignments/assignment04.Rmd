@@ -1,0 +1,80 @@
+---
+title: "EDUC 641 Assignment 4"
+subtitle: "Continuous relationships and bivariate regression"
+output: html_document
+---
+```{R, setup, include = FALSE}
+if (!require(pacman)) install.packages('pacman', repos = 'https://cran.rstudio.com')
+pacman::p_load(here, tidyverse, ggplot2, xaringan, knitr, kableExtra)
+
+opts_chunk$set(include = FALSE)
+```
+
+
+### General Guidelines
+
+The purpose of this assignment is to practice the concepts and vocabulary we have been modeling in class and implement some of the techniques we have learned. You may work on your own or collaborate with one partner. Please make sure that you engage in a a full, fair and mutually-agreeable collaboration if you do choose to collaborate. If you do collaborate, you should plan, execute and write-up your analyses together, not simply divide the work. Please make sure to indicate clearly when your work is joint and any other individual or resource (outside of class material) you consulted in your responses.
+
+### Submission Requirements
+
+Please upload below two files on Canvas:  
+
+1. An .html, .doc(x) or .pdf file that includes your typed responses (in your own words and not identical to anybody else's except your partner), tables, and/or figures to the problems
+2. The .Rmd or .R file that you used to render the tables and figures in the above html/pdf. 
+
+*If you have prior experience, you may choose to compose your answers in RMarkdown and render to a Word doc or pdf. If so, you can simply set up echo = TRUE and include = TRUE in your .Rmd file to allow both code and answers to display in a single output file. If you have no idea what the preceding sentence meant, ignore it.*  
+
+### Objectives of this assignment
+
+ * Create bivariate scatterplots and bivariate regression estimates
+
+ * State null hypothesis and interpret results of linear regression test of bivariate continuous relationship
+ 
+ * Test (some) assumptions of bivariate regression estimation
+ 
+### Data Background
+
+The dataset we'll be using in this assignment is drawn from the NCRECE [Teacher Professional Development Study (PDS)](https://www.icpsr.umich.edu/web/ICPSR/studies/34848) data. This professional development study was a randomized controlled evaluation of two forms of professional development (PD) - coursework (phase 1) and consultancy (phase 2) - delivered to about 490 early childhood education teachers across the nation. These PD supports aimed to improve teachers' implementation of language/literacy activities and interactions with children, as well as promote gains in children's social and academic development. 
+
+The primary goal of the intervention was to improve language and literacy skills, however, prior studies have shown that there were no observed average impacts of either the coursework or the consultancy PD intervention on child outcomes at the end of phase 2 ([Pianta et al., 2017](https://www.tandfonline.com/doi/abs/10.1080/10409289.2017.1319783?journalCode=heed20)). We draw a sample similar to the one used in Pianta et al (2017) but limit to only teachers who were treated in phase 1 then assigned to either treatment or control group in phase 2. This sample allows you to answer two questions: (a) did the consultancy PD intervention improve children vocabulary? and (b) did the dosage of the coursework PD intervention impact children vocabulary skills? You will answer these two questions in the paired assignments 3 and 4.
+
+**Sample**. Our dataset is teacher-level data for 126 preschool teachers. They were all in the treatment group for the 14-session coursework PD intervention, had no missing data on coursework attendance, and were in either the treatment or control group for the consultancy PD intervention.
+
+**Key variables**. We have two treatment measures, a binary variable indicating whether the teacher was treated in the consultancy PD intervention and an integer variable capturing the total number of sessions the teacher participated in the coursework PD intervention. We also have an outcome measure, the average score of each teacher's students on a receptive vocabulary test (Peabody Picture Vocabulary Test-3rd edition). 
+
+Details on all variables are as follows:
+
+ * *tchid*, the teacher's unique identification number.
+ * *treat*, consultancy treatment indicator, coded 1 if the teacher was in the treatment group (participated in consultancy PD), coded 0 if the teacher was in the control group.  
+ * *coursework*, continuous integer measure of how many sessions the teacher participated in the coursework. 
+ * *vocabulary*, the average score of the teacher's students on a vocabulary test. 
+
+
+### Assignment Details
+
+**Data preparation** *(same as Assignment 3)*: Open your RStudio, create a project and save it. Go to the root directory of the project and create folders named: "Code", "Data", "Figures" and "Tables." Download the [cont.csv dataset](../data/cont.csv) and store it in the folder "Data". Create an R script (or .Rmd) file in the Code folder. Read the data into your R environment. Transform variables, as needed. You do not need to include this part of the response in your memo; only in your code.
+
+
+#### 1. Descriptive Statistics
+
+1.1. Summarize the dataset. Specifically, create a table for the cont.csv dataset to show the means and standard deviations of the continuous variables and the counts and percentages for each category of the categorical variables. Write 2-3 sentences to report and interpret these statistics. **(2 point)**
+
+1.2 Create a plot (label the x and y axis) to visualize the relationship between the variable $VOCABULARY$ and $COURSEWORK$. Include a line of best fit on this display. **(2 points)**
+
+1.3 Write one sentence to interpret this visualized relationship. **(1 point)**
+
+1.4 Can you conclude whether teachers who attended more coursework have higher student score? Why or why not? **(1 point)**
+
+
+#### 2. Research Question: Is the dosage the PD intervention related to children's vocabulary scores?
+
+2.1. Write your null hypothesis about the relationship between coursework dosage and teachers' students' average vocabulary scores. **(1 point)**
+
+2.2 Formally test your hypothesis using an Ordinary Least Squares estimation strategy. Conduct the test and report your results in a formatted table. **(2 points)**
+
+2.3 Substantively interpret the results of your test. **(2 point)**
+
+2.4. What statistical assumption(s) have you made in modeling the relationship between $VOCABULARY$ and $COURSEWORK$ in this way? Test whether your estimates satisfy these assumptions. **(2 points)**
+
+2.5 What is your answer to this research question? **(1 point)**
+

@@ -1,0 +1,468 @@
+---
+title: "Examining the Relationship Between Continuous Variables"
+subtitle: "EDUC 641: Unit 4 Part 1"
+author: "David D. Liebowitz"
+#date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'uo', 'ki-fonts', 'my_custom.css', 'xaringanthemer.css']
+        # self_contained: true
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+
+---
+
+```{R, setup, include = F}
+library(pacman)
+p_load(here, tidyverse, ggplot2, xaringan, knitr, kableExtra, xaringanthemer, faux, ellipse)
+
+i_am("slides/EDUC641_14_continuousrel.rmd")
+
+
+red_pink <- "#e64173"
+turquoise = "#20B2AA"
+orange = "#FFA500"
+red = "#fb6107"
+blue = "#3b3b9a"
+green = "#8bb174"
+grey_light = "grey70"
+grey_mid = "grey50"
+grey_dark = "grey20"
+purple = "#6A5ACD"
+slate = "#314f4f"
+
+extra_css <- list(
+  ".red"   = list(color = "red"),
+  ".blue"  =list(color = "blue"),
+  ".red-pink" = list(color= "red_pink"),
+  ".grey-light" = list(color= "grey_light"),
+  ".purple" = list(color = "purple"),
+  ".small" = list("font-size" = "90%"))
+
+write_extra_css(css = extra_css, outfile = "my_custom.css")
+
+
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 6.75,
+  fig.width = 10.5,
+  warning = F,
+  message = F
+)
+opts_chunk$set(dev = "svg")
+options(device = function(file, width, height) {
+  svg(tempfile(), width = width, height = height)
+})
+options(knitr.table.format = "html")
+
+```
+# Roadmap
+
+```{r, out.width = "90%", echo=F}
+  include_graphics("Roadmap_4.png")
+```
+
+                                                       
+---
+# Goals of the unit
+
+- Describe relationships between quantitative data that are continuous
+- Visualize and substantively describe the relationship between two continuous variables
+
+.grey-light[
+- Describe and interpret a fitted bivariate regression line
+- Describe and interpret components of a fitted bivariate linear regression model
+- Visualize and substantively interpret residuals resulting from a bivariate regression model
+- Conduct a statistical inference test of the slope and intercept of a bivariate regression model
+- Write R scripts to conduct these analyses
+]
+
+---
+# Reminder of motivating question
+
+#### We learned a lot about the distribution of life expectancy in countries, now we are turning to thinking about relationships between life expectancy and other variables. In particular:
+
+.blue[**Do individuals living in countries with more total years of attendance in school experience, on average, higher life expectancy?**]
+
+--
+
+#### In other words, we are asking whether the variables *SCHOOLING* and *LIFE_EXPECTANCY* are related.
+
+---
+# Materials
+
+### 1. Life expectancy data (in file called life_expectancy.csv)
+### 2. Codebook describing the contents of said data
+### 3. R script to conduct the data analytic tasks of the unit (EDUC641_14_code.R)
+
+---
+class: middle, inverse
+# Bivariate relationships between continuous variables<sup>1</sup>
+
+.footnote[[1] We can also look at relationships between continuous and categorical variables with increasingly sophisticated--but  functionally equivalent--methods, including two-sample t-tests, ANOVA, ANCOVA, regression, and more. We will examine these topics in EDUC 643.]
+---
+## Recall life expectancy distribution
+```{r, echo = F, fig.height=5.5}
+who <- read.csv(here::here("data/life_expectancy.csv")) %>%
+ janitor::clean_names() %>% 
+ filter(year == 2015) %>%
+ select(country, schooling, year, life_expectancy) %>% 
+ mutate(life_expectancy = round(life_expectancy, digits = 0))
+who <- filter(who, !is.na(schooling))
+who <- filter(who, !is.na(life_expectancy))
+
+stem(who$life_expectancy)
+```
+
+---
+# Another way
+```{r, echo=F, fig.height=5.5}
+ggplot(who, aes(x = life_expectancy)) +
+  geom_histogram(binwidth = 1) +
+    theme_minimal(base_size = 16)
+```
+
+
+---
+# What about schooling?
+```{r, echo=F, fig.height=5.5}
+stem(who$schooling)
+```
+
+---
+# And differently again
+```{r, echo=F, fig.height=5.5}
+ggplot(who, aes(x = schooling)) +
+  geom_histogram(binwidth = 1) +
+    theme_minimal(base_size = 16)
+```
+
+---
+# Numerical univariate statistics
+
+```{r, echo=T}
+summary(who$life_expectancy)
+summary(who$schooling)
+```
+
+<br>
+
+.blue[***Can you interpret the univariate statistics and displays on this and the previous slides? Describe to folks at your table information about the measures of central tendency and the distributional shape of these two variables***]
+
+---
+# Visualizing the relationship
+
+```{r, echo = F, fig.height=5.5}
+ggplot(who, aes(x = schooling, y = life_expectancy)) + 
+  geom_label(aes(label=country)) + 
+  xlim(0, 22) +
+  ylab("Life Expectancy (Yrs)") + xlab("Schooling (Yrs)") +
+  scale_y_continuous(breaks = seq(40, 90, 10), limits = c(40, 90)) +
+    theme_minimal(base_size = 16)
+```
+
+--
+
+Probably easier to see if we have some symbolic way of representing our data...
+
+
+
+---
+# Visualizing the relationship
+```{r, echo=F, fig.height=5.5}
+biv <- ggplot(who, aes(x = schooling, y = life_expectancy)) + 
+  geom_point() + 
+  xlim(0, 22) +
+  ylab("Life Expectancy (Yrs)") + xlab("Schooling (Yrs)") +
+  scale_y_continuous(breaks = seq(40, 90, 10), limits = c(40, 90)) +
+    theme_minimal(base_size = 16)
+
+biv
+
+```
+
+--
+
+.small[Horizontal axis (or *x*-axis) labels the value of the "predictor" *SCHOOLING*. Vertical axis (or *y*-axis) labels the value of the "outcome" *LIFE_EXPECTANCY*]
+
+.blue[*Can you interpret the bivariate display? What does it (and does it NOT) say about the relationship between schooling and life expectancy?*]
+
+---
+# Visualizing the relationship
+
+```{r, echo = F, fig.height=5.5}
+who_chile <- filter(who, country == "Chile")
+
+biv_c <- biv + 
+  geom_point(data = who_chile, aes(x=schooling, y = life_expectancy),
+                    color = 'red',
+                    size = 3) +
+  geom_vline(xintercept = 16.3, color = "red", linetype = "dashed", size = 0.75) +
+  geom_hline(yintercept = 85, color = "red", linetype = "dashed" , size = 0.75) +
+  annotate('text', label = "Chile", x = 15.5, y = 87, color = "red", size = 6) +
+  annotate('text', label = "16.3", color = "red", x = 16.9, y = 40, size = 5) +
+  annotate('text', label = "85", color = "red", x = 0, y = 87, size =5) +
+    theme_minimal(base_size = 16)
+
+
+biv_c
+
+```
+
+--
+
+.blue[*Can you interpret what this display says about the country of Chile?*]
+
+---
+# You try...
+
+```{r, echo = F, fig.height=5.5}
+who_egypt <- filter(who, country == "Egypt")
+
+biv_c + 
+   geom_point(data = who_egypt, aes(x=schooling, y = life_expectancy),
+                    color = 'blue',
+                    size = 3) +
+   annotate('text', label = "Egypt", x = 12.1, y = 79, color = "blue", size = 6) +
+    theme_minimal(base_size = 16)
+
+```
+
+.blue[*Can you interpret what this display says about the country of Egypt?*]
+
+---
+# What about the relationship?
+```{r, echo = F, fig.height=5.5}
+biv
+```
+
+.blue[*Is there a relationship between SCHOOLING and LIFE_EXPECTANCY? How do you know?*]
+
+--
+
+.blue[*What kind of line, curve or other construction best summarizes the observed relationship between SCHOOLING and LIFE_EXPECTANCY?*]
+
+---
+# What about the relationship?
+```{r, echo = F, fig.height=5.5}
+
+df <- data.frame()
+df <- rbind(df, cbind(as.data.frame(with(who, ellipse(cor(schooling, life_expectancy), 
+                                         scale=c(sd(schooling),sd(life_expectancy)), 
+                                         centre=c(mean(schooling),mean(life_expectancy)),
+                                         level = 0.99)))))
+
+biv2 <- biv + 
+          geom_path(data=df, aes(x=x, y=y), linetype=2)
+biv2
+```
+
+.blue[*What kind of line, curve or other construction best summarizes the observed relationship between SCHOOLING and LIFE_EXPECTANCY?*]
+
+---
+# What about the relationship?
+```{r, echo=F, fig.height=5.5}
+biv2 + geom_smooth(method=lm, se=F)
+
+```
+
+.blue[*What kind of line, curve or other construction best summarizes the observed relationship between SCHOOLING and LIFE_EXPECTANCY?*]
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+set.seed(12345)
+dat <- rnorm_multi(n = 100, 
+                  mu = c(0, 20, 22),
+                  sd = c(1, 5, 2),
+                  r = c(0.5, 0.5, -0.25), 
+                  varnames = c("A", "B", "C"),
+                  empirical = FALSE)
+
+pin1 <- ggplot(dat, aes(x = A, y = B)) + 
+          geom_point(size=3, color=red_pink) + 
+          theme_minimal(base_size = 16)
+
+
+pin1
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin1 + geom_smooth(method = lm, se = F)
+
+```
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin2 <- ggplot(dat, aes(x = B, y = C)) + 
+          geom_point(size=3, color=red_pink) + 
+          theme_minimal(base_size = 16)
+
+
+pin2
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin2 + geom_smooth(method = lm, se = F)
+
+```
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin3 <- ggplot(dat, aes(x = A, y = C)) + 
+          geom_point(size=3, color=red_pink) + 
+          theme_minimal(base_size = 16)
+
+
+pin3
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin3 + geom_smooth(method = lm, se = F)
+
+```
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+dat1 <- rnorm_multi(n = 100, 
+                  mu = c(0, 25),
+                  sd = c(1, 4),
+                  r = 0, 
+                  varnames = c("A", "D"),
+                  empirical = FALSE)
+
+
+pin4 <- ggplot(dat1, aes(x = D, y = A)) + 
+          geom_point(size=3, color=red_pink) + 
+          theme_minimal(base_size = 16)
+
+
+pin4
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin4 + geom_smooth(method = lm, se = F)
+
+```
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+dat2 <- rnorm_multi(n = 100, 
+                  mu = c(0, 25, 16),
+                  sd = c(1, 4, 8),
+                  r = c(-0.24, 0.87, -0.58), 
+                  varnames = c("A", "E", "F"),
+                  empirical = FALSE)
+
+
+pin5 <- ggplot(dat2, aes(x = A, y = E)) + 
+          geom_point(size=3, color=red_pink) + 
+          theme_minimal(base_size = 16)
+
+
+pin5
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin5 + geom_smooth(method = lm, se = F)
+
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin6 <- ggplot(dat2, aes(x = A, y = F)) + 
+          geom_point(size=3, color=red_pink) + 
+          theme_minimal(base_size = 16)
+
+
+pin6
+```
+
+---
+# Pin the tail on the point cloud
+
+```{r, echo=F, fig.height=6.5}
+pin6 + geom_smooth(method = lm, se = F)
+
+```
+---
+# An aside about the origin
+```{r, echo = F, fig.height=5.5}
+bar <- filter(who, country == "Egypt" | country=="Chile")
+
+ggplot(bar, aes(x = country, y = schooling)) + 
+  geom_col() +
+    theme_minimal(base_size = 16)
+``` 
+
+*Figures that compare measures of central tendency across groups (e.g., bar charts) should generally start at zero (0) so as not to artificially inflate the differences between groups*
+
+---
+# An aside about the origin
+
+```{r, echo = F, fig.height=5.5}
+g1 <- ggplot(who, aes(x = schooling, y = life_expectancy)) + 
+  geom_point() + 
+  xlim(0, 22) +
+  ylab("Life Expectancy (Yrs)") + xlab("Schooling (Yrs)") +
+  scale_y_continuous(breaks = seq(0, 90, 10), limits = c(0, 90)) +
+  annotate('text', label = "Origin", x = 1, y = 3, color = "red", size =5) +
+    theme_minimal(base_size = 16)
+
+g3 <- ggplot(who, aes(x = schooling, y = life_expectancy)) + 
+  geom_point() + 
+  xlim(0, 22) +
+  ylab("Life Expectancy (Yrs)") + xlab("Schooling (Yrs)") +
+  scale_y_continuous(breaks = seq(50, 90, 10), limits = c(50, 90)) +
+    theme_minimal(base_size = 16)
+
+gridExtra::grid.arrange(g1, g3, ncol=2)
+```
+
+*Figures that describe relationships between two variables (e.g., scatter plots) might (or might not) include the origin (0, 0). The key concept these charts illustrate is the relationship. By adjusting the scale and range of each axis, we can make the relationship "look" different. But the strength and magnitude are the same.* More to come in EDUC 643...
+
+
+---
+class: middle, inverse
+# Synthesis and wrap-up
+
+
+---
+# Goals of the unit
+
+- Describe relationships between quantitative data that are continuous
+- Visualize and substantively describe the relationship between two continuous variables
+
+.grey-light[
+- Describe and interpret a fitted bivariate regression line
+- Describe and interpret components of a fitted bivariate linear regression model
+- Visualize and substantively interpret residuals resulting from a bivariate regression model
+- Conduct a statistical inference test of the slope and intercept of a bivariate regression model
+- Write R scripts to conduct these analyses
+]
