@@ -1,7 +1,7 @@
 ---
-title: "EDUC 641: Applied Statistics in Education and Human Services I Hello"
-subtitle: "College of Education, University of Oregon"
-author: "David D. Liebowitz"
+title: "Eunji Kong's Program Plan"
+subtitle: "Department of Special Education, College of Education, University of Oregon"
+author: "Eunji Kong"
 
 site: distill::distill_website
 output:
@@ -17,15 +17,7 @@ knitr::opts_chunk$set(
   echo = FALSE)
 ```
 
-# Course Overview
+# Welcome
 
-This course provides a first introduction to quantitative data analysis in education and the social sciences. It is part of a three course sequence intended to provide a toolkit of statistical concepts, methods and their implementation to producers of applied research in education and other social sciences. The course is organized around the principle that research design depends in part on researchers' substantive questions and their quantitative data available to answer these question. In this introductory course, we will focus on describing categorical and continuous data and quantifying the relationship between categorical and continuous data. Students will form a solid foundation for frequentist, inferential statistics (and some of critiques of this model). The course seeks to blend a conceptual, mathematical and applied understanding of basic statistical concepts. At the core of our pedagogical approach is the belief that students learn statistical analysis by **doing** statistical analysis. *This course (or substitute) is a pre-requisite for EDUC 643*.
-
-# Meeting time and location
-- *Class:* Tuesdays and Thursdays, 4:00pm - 5:20pm, 
-- *Lab:*  
-
-# Instructors
-- David D. Liebowitz
-- 
+Thank you for coming to Eunji's Program Plan Meeting today
 

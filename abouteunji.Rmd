@@ -1,0 +1,17 @@
+---
+title: "About Eunji Kong"
+site: distill::distill_website
+output:
+  html_document:
+    toc: TRUE
+    toc_depth: 3
+    toc_float: TRUE
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse, knitr)
+```
+
+

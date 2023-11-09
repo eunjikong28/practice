@@ -1,14 +1,14 @@
 name: EDUC 641
 output_dir: "."
 navbar:
-  title: "EDUC 641"
+  title: "EK Program PLan"
   
   left:
-  - text: EK_Syllabus
-    href: EK_syllabus.html
-  - text: Schedule
-    href: schedule.html
-  - text: Lectures
+  - text: About Eunji
+    href: abouteunji.html
+  - text: Areas of Specialization
+    href: area.html
+  - text: Coursework
     menu: 
       - text: "1. Intro & research design"
         href: ./slides/EDUC641_1_intro.html
@@ -51,7 +51,7 @@ navbar:
   - text: Assignments
     href: assignments.html
   - icon: fa-github
-    href: https://github.com/uo-educ-quant/641
+    href: https://github.com/eunjikong28/practice
 
 output:
   html_document:
