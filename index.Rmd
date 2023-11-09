@@ -1,5 +1,5 @@
 ---
-title: "EDUC 641: Applied Statistics in Education and Human Services I"
+title: "EDUC 641: Applied Statistics in Education and Human Services I Hello"
 subtitle: "College of Education, University of Oregon"
 author: "David D. Liebowitz"
 
